@@ -29,10 +29,17 @@ import br.com.alura.ecohaulconnect.ui.theme.FontColor
 import br.com.alura.ecohaulconnect.ui.theme.White96
 
 @Composable
-fun ServiceCard(service: Service) {
-    Surface(shape = RoundedCornerShape(15.dp), shadowElevation = 4.dp) {
+fun ServiceCard(
+    service: Service,
+    modifier: Modifier = Modifier,
+    onNavigateToServiceDetails: () -> Unit = {}
+) {
+    Surface(
+        shape = RoundedCornerShape(15.dp),
+        shadowElevation = 4.dp
+    ) {
         Column(
-            Modifier
+            modifier
                 .width(380.dp)
                 .height(240.dp)
                 .background(White96)
@@ -91,7 +98,7 @@ fun ServiceCard(service: Service) {
             Row(Modifier.padding(top = 32.dp, bottom = 16.dp, end = 16.dp, start = 16.dp)) {
                 Spacer(modifier = Modifier.weight(1f))
                 Button(
-                    onClick = { /*TODO*/ },
+                    onClick = {onNavigateToServiceDetails()},
                     colors = ButtonDefaults.buttonColors(containerColor = ButtonColor)
                 ) {
                     Text(text = "Detalhes")

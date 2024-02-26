@@ -3,6 +3,7 @@ package br.com.alura.ecohaulconnect.components
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -18,14 +19,14 @@ import br.com.alura.ecohaulconnect.sampledata.sampleServiceList
 import br.com.alura.ecohaulconnect.ui.theme.White96
 
 @Composable
-fun ServiceList(services: List<Service>) {
+fun ServiceList(services: List<Service>, modifier: Modifier = Modifier) {
     LazyColumn(
-        Modifier
+        modifier
             .background(White96)
-            .padding(start = 24.dp, end = 24.dp, bottom = 24.dp),
+            .padding(start = 24.dp, end = 24.dp),
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
-        item() {
+        /* item() {
             Row(Modifier.padding(top = 16.dp)) {
                 Text(
                     text = "Meus serviços",
@@ -33,10 +34,17 @@ fun ServiceList(services: List<Service>) {
                     fontWeight = FontWeight(400)
                 )
             }
-        }
+        } */
+       item {
+           Spacer(modifier = Modifier)
+       }
 
         items(services) {service ->
             ServiceCard(service = service)
+        }
+
+        item {
+            Spacer(modifier = Modifier)
         }
     }
 }

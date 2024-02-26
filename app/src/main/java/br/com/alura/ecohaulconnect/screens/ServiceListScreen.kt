@@ -14,11 +14,12 @@ import br.com.alura.ecohaulconnect.sampledata.sampleServiceList
 import br.com.alura.ecohaulconnect.ui.theme.White96
 
 @Composable
-fun ServiceListScreen(services: List<Service>) {
+fun ServiceListScreen(services: List<Service>, modifier: Modifier = Modifier) {
     Column(
-        Modifier
+        modifier
             .fillMaxSize()
-            .background(White96), horizontalAlignment = Alignment.CenterHorizontally
+            .background(White96),
+        horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Spacer(Modifier)
         ServiceList(services = services)
