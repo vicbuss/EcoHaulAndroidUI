@@ -4,12 +4,17 @@ import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.pager.HorizontalPager
+import androidx.compose.foundation.pager.PageSize
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -49,6 +54,7 @@ import kotlin.math.absoluteValue
 fun ServiceDetails(service: Service, modifier: Modifier = Modifier) {
     Column(
         modifier
+            .fillMaxHeight()
             .background(White96)
             .padding(horizontal = 16.dp)
             .verticalScroll(rememberScrollState())
@@ -113,24 +119,28 @@ fun ServiceDetails(service: Service, modifier: Modifier = Modifier) {
             )
         }
         Divider()
-        for (item in service.items) {
-            Column(Modifier.padding(bottom = 16.dp, top = 16.dp)) {
-                Text(
-                    text = "Item ${service.items.indexOf(item) + 1}",
-                    color = FontColor,
-                    fontSize = 16.sp,
-                    fontWeight = FontWeight(400)
-                )
-                Text(
-                    text = "${service.category} - ${item.description}",
-                    color = FontColor,
-                    fontSize = 14.sp,
-                    fontWeight = FontWeight(400)
-                )
-            }
-            val pagerState = rememberPagerState(pageCount = {item.pictureLinks.size})
-            HorizontalPager(state = pagerState) { page ->
-                for (picture in item.pictureLinks) {
+        Column {
+            for (item in service.items) {
+                Column(Modifier.padding(bottom = 16.dp, top = 16.dp)) {
+                    Text(
+                        text = "Item ${service.items.indexOf(item) + 1}",
+                        color = FontColor,
+                        fontSize = 16.sp,
+                        fontWeight = FontWeight(400)
+                    )
+                    Text(
+                        text = "${service.category} - ${item.description}",
+                        color = FontColor,
+                        fontSize = 14.sp,
+                        fontWeight = FontWeight(400)
+                    )
+                }
+                val pictures = item.pictureLinks
+                val pagerState = rememberPagerState(pageCount = { pictures.size })
+                HorizontalPager(
+                    state = pagerState,
+                    pageSize = PageSize.Fixed(200.dp)
+                ) { page ->
                     Card(
                         Modifier
                             .size(200.dp)
@@ -139,91 +149,99 @@ fun ServiceDetails(service: Service, modifier: Modifier = Modifier) {
                                         (pagerState.currentPage - page) + pagerState
                                             .currentPageOffsetFraction
                                         ).absoluteValue
+                                lerp(
+                                    start = 0.75f,
+                                    stop = 1f,
+                                    fraction = 1f - pageOffset.coerceIn(0f, 1f)
+                                ).also { scale ->
+                                    scaleX = scale
+                                    scaleY = scale
+                                }
                                 alpha = lerp(
                                     start = 0.5f,
                                     stop = 1f,
                                     fraction = 1f - pageOffset.coerceIn(0f, 1f)
                                 )
-                            }
-                    ) {
+
+                            }) {
                         AsyncImage(
-                            model = picture,
+                            model = pictures[page],
                             contentDescription = null,
-                            Modifier.size(200.dp),
+                            Modifier
+                                .size(200.dp),
                             contentScale = ContentScale.Crop,
                             placeholder = painterResource(id = R.drawable.ic_launcher_background)
                         )
                     }
                 }
-            }
-
-            Row(Modifier.padding(vertical = 16.dp)) {
-                Column {
-                    Column(Modifier.padding(bottom = 16.dp)) {
-                        Text(
-                            text = "Altura",
-                            color = FontColor,
-                            fontSize = 16.sp,
-                            fontWeight = FontWeight(400)
-                        )
-                        Text(
-                            text = "50 cm",
-                            color = FontColor,
-                            fontSize = 14.sp,
-                            fontWeight = FontWeight(400)
-                        )
-
-                    }
+                Row(Modifier.padding(vertical = 16.dp)) {
                     Column {
-                        Text(
-                            text = "Comprimento",
-                            color = FontColor,
-                            fontSize = 16.sp,
-                            fontWeight = FontWeight(400)
-                        )
-                        Text(
-                            text = "120 cm",
-                            color = FontColor,
-                            fontSize = 14.sp,
-                            fontWeight = FontWeight(400)
-                        )
+                        Column(Modifier.padding(bottom = 16.dp)) {
+                            Text(
+                                text = "Altura",
+                                color = FontColor,
+                                fontSize = 16.sp,
+                                fontWeight = FontWeight(400)
+                            )
+                            Text(
+                                text = "50 cm",
+                                color = FontColor,
+                                fontSize = 14.sp,
+                                fontWeight = FontWeight(400)
+                            )
 
+                        }
+                        Column {
+                            Text(
+                                text = "Comprimento",
+                                color = FontColor,
+                                fontSize = 16.sp,
+                                fontWeight = FontWeight(400)
+                            )
+                            Text(
+                                text = "120 cm",
+                                color = FontColor,
+                                fontSize = 14.sp,
+                                fontWeight = FontWeight(400)
+                            )
+
+                        }
                     }
-                }
-                Spacer(modifier = Modifier.weight(1f))
-                Column {
-                    Column(Modifier.padding(bottom = 16.dp)) {
-                        Text(
-                            text = "Largura",
-                            color = FontColor,
-                            fontSize = 16.sp,
-                            fontWeight = FontWeight(400)
-                        )
-                        Text(
-                            text = "50 cm",
-                            color = FontColor,
-                            fontSize = 14.sp,
-                            fontWeight = FontWeight(400)
-                        )
-                    }
+                    Spacer(modifier = Modifier.weight(1f))
                     Column {
-                        Text(
-                            text = "Peso",
-                            color = FontColor,
-                            fontSize = 16.sp,
-                            fontWeight = FontWeight(400)
-                        )
-                        Text(
-                            text = "5 kg",
-                            color = FontColor,
-                            fontSize = 14.sp,
-                            fontWeight = FontWeight(400)
-                        )
+                        Column(Modifier.padding(bottom = 16.dp)) {
+                            Text(
+                                text = "Largura",
+                                color = FontColor,
+                                fontSize = 16.sp,
+                                fontWeight = FontWeight(400)
+                            )
+                            Text(
+                                text = "50 cm",
+                                color = FontColor,
+                                fontSize = 14.sp,
+                                fontWeight = FontWeight(400)
+                            )
+                        }
+                        Column {
+                            Text(
+                                text = "Peso",
+                                color = FontColor,
+                                fontSize = 16.sp,
+                                fontWeight = FontWeight(400)
+                            )
+                            Text(
+                                text = "5 kg",
+                                color = FontColor,
+                                fontSize = 14.sp,
+                                fontWeight = FontWeight(400)
+                            )
+                        }
                     }
                 }
             }
         }
-
+        Spacer(modifier = Modifier.weight(1f))
         Row(Modifier.padding(bottom = 16.dp)) {
             Spacer(modifier = Modifier.weight(1f))
             Button(
