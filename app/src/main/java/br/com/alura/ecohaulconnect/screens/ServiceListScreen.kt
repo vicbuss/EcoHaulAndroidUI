@@ -14,7 +14,11 @@ import br.com.alura.ecohaulconnect.sampledata.sampleServiceList
 import br.com.alura.ecohaulconnect.ui.theme.White96
 
 @Composable
-fun ServiceListScreen(services: List<Service>, modifier: Modifier = Modifier) {
+fun ServiceListScreen(
+    services: List<Service>,
+    modifier: Modifier = Modifier,
+    onNavigateToServiceDetails: () -> Unit = {}
+) {
     Column(
         modifier
             .fillMaxSize()
@@ -22,7 +26,7 @@ fun ServiceListScreen(services: List<Service>, modifier: Modifier = Modifier) {
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Spacer(Modifier)
-        ServiceList(services = services)
+        ServiceList(services = services, onNavigateToServiceDetails = onNavigateToServiceDetails)
         Spacer(Modifier)
     }
 }

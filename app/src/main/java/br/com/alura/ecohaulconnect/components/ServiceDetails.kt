@@ -51,7 +51,12 @@ import kotlin.math.absoluteValue
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun ServiceDetails(service: Service, modifier: Modifier = Modifier) {
+fun ServiceDetails(
+    service: Service,
+    modifier: Modifier = Modifier,
+    onEditService: () -> Unit = {},
+    onCancelService: () -> Unit = {}
+) {
     Column(
         modifier
             .fillMaxHeight()
@@ -136,7 +141,7 @@ fun ServiceDetails(service: Service, modifier: Modifier = Modifier) {
                     )
                 }
                 val pictures = item.pictureLinks
-                val pagerState = rememberPagerState(pageCount = { pictures.size })
+                val pagerState = rememberPagerState(pageCount = { pictures.size + 1 })
                 HorizontalPager(
                     state = pagerState,
                     pageSize = PageSize.Fixed(200.dp)
@@ -165,7 +170,8 @@ fun ServiceDetails(service: Service, modifier: Modifier = Modifier) {
 
                             }) {
                         AsyncImage(
-                            model = pictures[page],
+                            // model = pictures[page],
+                            model = if (page < pictures.size) pictures[page] else pictures[0],
                             contentDescription = null,
                             Modifier
                                 .size(200.dp),
@@ -245,7 +251,7 @@ fun ServiceDetails(service: Service, modifier: Modifier = Modifier) {
         Row(Modifier.padding(bottom = 16.dp)) {
             Spacer(modifier = Modifier.weight(1f))
             Button(
-                onClick = { /*TODO*/ },
+                onClick = {onEditService()},
                 Modifier
                     .padding(end = 8.dp)
                     .border(
@@ -261,7 +267,7 @@ fun ServiceDetails(service: Service, modifier: Modifier = Modifier) {
                 Text(text = "Editar")
             }
             Button(
-                onClick = { /*TODO*/ },
+                onClick = {onCancelService()},
                 colors = ButtonDefaults.buttonColors(containerColor = Green40)
             ) {
                 Text(text = "Cancelar serviço")

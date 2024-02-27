@@ -20,14 +20,22 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.sp
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.currentBackStackEntryAsState
+import androidx.navigation.compose.rememberNavController
 import br.com.alura.ecohaulconnect.components.EcoHaulBottomNavBar
 import br.com.alura.ecohaulconnect.components.NavBarItem
 import br.com.alura.ecohaulconnect.sampledata.bottomAppBarItems
+import br.com.alura.ecohaulconnect.sampledata.sampleService
 import br.com.alura.ecohaulconnect.sampledata.sampleServiceList
 import br.com.alura.ecohaulconnect.screens.ServiceDetailsScreen
 import br.com.alura.ecohaulconnect.screens.ServiceListScreen
@@ -38,9 +46,48 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
+            val navController = rememberNavController()
+            val backStackEntryState by navController.currentBackStackEntryAsState()
+            val currentDestination = backStackEntryState?.destination
             EcoHaulConnectTheme {
                 Surface(modifier = Modifier.fillMaxSize(), color = White96) {
-                    App(selectedBottomNavBarItem = bottomAppBarItems.first())
+                   val selectedItem by remember(currentDestination) {
+                      val item = currentDestination?.let { destination -> 
+                          bottomAppBarItems.find { 
+                              it.route == destination.route
+                          }
+                      } ?: bottomAppBarItems.first()
+                       mutableStateOf(item)
+                   }
+                    App(
+                        selectedBottomNavBarItem = selectedItem,
+                        onBottomNavBarSelectedItemChange = {
+                            val route = it.route
+                            navController.navigate(route) {
+                                launchSingleTop = true
+                                popUpTo(route)
+                            }
+                        }
+                    ) {
+                        NavHost(navController = navController, startDestination = "services") {
+                            composable("services") {
+                                ServiceListScreen(
+                                    services = sampleServiceList,
+                                    onNavigateToServiceDetails = {navController.navigate("serviceDetails")}
+                                )
+                            }
+                            composable("serviceDetails") {
+                                ServiceDetailsScreen(service = sampleService)
+                            }
+                            composable("addService") {
+                                Text(text = "Placeholder: Add service form")
+                            }
+                            composable("notifications") {
+                                Text(text = "Placeholder: Notifications screen")
+                            }
+                        }
+                        
+                    }
                 }
             }
         }
@@ -49,18 +96,22 @@ class MainActivity : ComponentActivity() {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun App(selectedBottomNavBarItem: NavBarItem) {
+fun App(
+    selectedBottomNavBarItem: NavBarItem = bottomAppBarItems.first(),
+    onBottomNavBarSelectedItemChange: (NavBarItem) -> Unit = {},
+    content: @Composable () -> Unit
+    ) {
     Scaffold(
         topBar = {
             TopAppBar(
-                navigationIcon = {
+                /* navigationIcon = {
                     IconButton(onClick = { /*TODO*/ }) {
                         Icon(imageVector = Icons.Filled.ArrowBack, contentDescription = "voltar")
                     }
-                },
+                } ,*/
                 title = {
                     Text(
-                        text = "Meus serviços",
+                        text = "EcoHaul Connect",
                     )
                 },
                 colors = TopAppBarDefaults.topAppBarColors(
@@ -71,13 +122,13 @@ fun App(selectedBottomNavBarItem: NavBarItem) {
         bottomBar = {
             EcoHaulBottomNavBar(
                 selectedItem = selectedBottomNavBarItem,
-                items = bottomAppBarItems
+                items = bottomAppBarItems,
+                onItemChange = onBottomNavBarSelectedItemChange
             )
         },
     ) {
         Box(Modifier.padding(it)) {
-            // ServiceListScreen(services = sampleServiceList)
-            ServiceDetailsScreen()
+            content()
         }
     }
 }
@@ -87,7 +138,7 @@ fun App(selectedBottomNavBarItem: NavBarItem) {
 fun AppPreview() {
     EcoHaulConnectTheme {
         Surface {
-            App(bottomAppBarItems.first())
+            App{}
         }
     }
 }

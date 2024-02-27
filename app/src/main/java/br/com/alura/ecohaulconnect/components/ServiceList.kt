@@ -19,7 +19,11 @@ import br.com.alura.ecohaulconnect.sampledata.sampleServiceList
 import br.com.alura.ecohaulconnect.ui.theme.White96
 
 @Composable
-fun ServiceList(services: List<Service>, modifier: Modifier = Modifier) {
+fun ServiceList(
+    services: List<Service>,
+    modifier: Modifier = Modifier,
+    onNavigateToServiceDetails: () -> Unit = {}
+    ) {
     LazyColumn(
         modifier
             .background(White96)
@@ -40,7 +44,7 @@ fun ServiceList(services: List<Service>, modifier: Modifier = Modifier) {
        }
 
         items(services) {service ->
-            ServiceCard(service = service)
+            ServiceCard(service = service, onNavigateToServiceDetails = onNavigateToServiceDetails)
         }
 
         item {

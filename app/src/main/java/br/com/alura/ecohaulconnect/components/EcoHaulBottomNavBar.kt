@@ -22,6 +22,7 @@ import br.com.alura.ecohaulconnect.ui.theme.Green90
 class NavBarItem(
     val label: String,
     val icon: ImageVector,
+    val route: String
 )
 
 @Composable
