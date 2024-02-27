@@ -26,6 +26,7 @@ import br.com.alura.ecohaulconnect.model.Service
 import br.com.alura.ecohaulconnect.sampledata.sampleService
 import br.com.alura.ecohaulconnect.ui.theme.ButtonColor
 import br.com.alura.ecohaulconnect.ui.theme.FontColor
+import br.com.alura.ecohaulconnect.ui.theme.Green40
 import br.com.alura.ecohaulconnect.ui.theme.White96
 
 @Composable
@@ -99,7 +100,7 @@ fun ServiceCard(
                 Spacer(modifier = Modifier.weight(1f))
                 Button(
                     onClick = {onNavigateToServiceDetails()},
-                    colors = ButtonDefaults.buttonColors(containerColor = ButtonColor)
+                    colors = ButtonDefaults.buttonColors(containerColor = Green40)
                 ) {
                     Text(text = "Detalhes")
                 }

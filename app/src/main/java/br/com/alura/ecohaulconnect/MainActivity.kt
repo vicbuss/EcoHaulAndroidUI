@@ -8,8 +8,10 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
@@ -27,6 +29,7 @@ import br.com.alura.ecohaulconnect.components.EcoHaulBottomNavBar
 import br.com.alura.ecohaulconnect.components.NavBarItem
 import br.com.alura.ecohaulconnect.sampledata.bottomAppBarItems
 import br.com.alura.ecohaulconnect.sampledata.sampleServiceList
+import br.com.alura.ecohaulconnect.screens.ServiceDetailsScreen
 import br.com.alura.ecohaulconnect.screens.ServiceListScreen
 import br.com.alura.ecohaulconnect.ui.theme.EcoHaulConnectTheme
 import br.com.alura.ecohaulconnect.ui.theme.White96
@@ -70,11 +73,11 @@ fun App(selectedBottomNavBarItem: NavBarItem) {
                 selectedItem = selectedBottomNavBarItem,
                 items = bottomAppBarItems
             )
-        }
-
+        },
     ) {
         Box(Modifier.padding(it)) {
-            ServiceListScreen(services = sampleServiceList)
+            // ServiceListScreen(services = sampleServiceList)
+            ServiceDetailsScreen()
         }
     }
 }
