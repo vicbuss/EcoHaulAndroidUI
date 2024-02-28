@@ -25,6 +25,11 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.Divider
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.layout.ContentScale
@@ -141,11 +146,21 @@ fun ServiceDetails(
                     )
                 }
                 val pictures = item.pictureLinks
-                val pagerState = rememberPagerState(pageCount = { pictures.size + 1 })
+                val pagerState = rememberPagerState(pageCount = {Int.MAX_VALUE})
                 HorizontalPager(
                     state = pagerState,
                     pageSize = PageSize.Fixed(200.dp)
                 ) { page ->
+                    var quotient by remember {
+                        mutableIntStateOf(page / pictures.size)
+                    }
+                    var listIndex by remember {
+                       mutableIntStateOf(page - pictures.size * quotient)
+                    }
+
+                    quotient = page / pictures.size
+                    listIndex = page - pictures.size * quotient
+
                     Card(
                         Modifier
                             .size(200.dp)
@@ -170,8 +185,7 @@ fun ServiceDetails(
 
                             }) {
                         AsyncImage(
-                            // model = pictures[page],
-                            model = if (page < pictures.size) pictures[page] else pictures[0],
+                            model = pictures[listIndex],
                             contentDescription = null,
                             Modifier
                                 .size(200.dp),
