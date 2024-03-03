@@ -104,21 +104,3 @@ val sampleService = Service(
         ),
         category = "Móveis"
 )
-
-val bottomAppBarItems = listOf<NavBarItem>(
-    NavBarItem(
-        label = "Meus serviços",
-        icon = Icons.Filled.Home,
-        route = "services"
-    ),
-    NavBarItem(
-        label = "Novo serviço",
-        icon = Icons.Filled.AddCircle,
-        route = "addService"
-    ),
-    NavBarItem(
-        label = "Notificações",
-        icon = Icons.Filled.Notifications,
-        route = "notifications"
-    )
-)
