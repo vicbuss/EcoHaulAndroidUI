@@ -1,12 +1,5 @@
 package br.com.alura.ecohaulconnect.sampledata
 
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.AccountCircle
-import androidx.compose.material.icons.filled.AddCircle
-import androidx.compose.material.icons.filled.Home
-import androidx.compose.material.icons.filled.List
-import androidx.compose.material.icons.filled.Notifications
-import br.com.alura.ecohaulconnect.components.NavBarItem
 import br.com.alura.ecohaulconnect.model.Item
 import br.com.alura.ecohaulconnect.model.Service
 import java.math.BigDecimal

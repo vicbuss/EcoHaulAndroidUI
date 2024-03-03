@@ -17,11 +17,12 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.navigation.NavController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -31,7 +32,6 @@ import br.com.alura.ecohaulconnect.components.EcoHaulBottomNavBar
 import br.com.alura.ecohaulconnect.components.NavBarItem
 import br.com.alura.ecohaulconnect.navigation.AppDestinations
 import br.com.alura.ecohaulconnect.navigation.bottomAppBarItems
-import br.com.alura.ecohaulconnect.sampledata.sampleService
 import br.com.alura.ecohaulconnect.sampledata.sampleServiceList
 import br.com.alura.ecohaulconnect.screens.ServiceDetailsScreen
 import br.com.alura.ecohaulconnect.screens.ServiceListScreen
@@ -45,6 +45,7 @@ class MainActivity : ComponentActivity() {
             val navController = rememberNavController()
             val backStackEntryState by navController.currentBackStackEntryAsState()
             val currentDestination = backStackEntryState?.destination
+            val services = sampleServiceList
             EcoHaulConnectTheme {
                 Surface(modifier = Modifier.fillMaxSize(), color = White96) {
                     val selectedItem by remember(currentDestination) {
@@ -55,20 +56,24 @@ class MainActivity : ComponentActivity() {
                         } ?: bottomAppBarItems.first()
                         mutableStateOf(item)
                     }
-                    val isContainedInBottomBarItems = currentDestination?.let {destination ->
-                       bottomAppBarItems.find { item ->
-                           destination.route == item.route
-                       }
+                    val isContainedInBottomBarItems = currentDestination?.let { destination ->
+                        bottomAppBarItems.find { item ->
+                            destination.route == item.route
+                        }
                     } != null
-                    val isShowNavigationIcon = when(currentDestination?.route) {
+                    val isShowNavigationIcon = when (currentDestination?.route) {
                         AppDestinations.Services.route -> false
                         else -> true
                     }
-                    val topBarTitle = when(currentDestination?.route){
+                    val serviceId = backStackEntryState?.arguments?.getString("serviceId")
+                    val service = services.find { service ->
+                        service.id == serviceId
+                    }
+                    val topBarTitle = when (currentDestination?.route) {
                         AppDestinations.Services.route -> AppDestinations.Services.title
-                        AppDestinations.ServiceDetails.route -> AppDestinations.ServiceDetails.title
                         AppDestinations.AddService.route -> AppDestinations.AddService.title
                         AppDestinations.Notifications.route -> AppDestinations.Notifications.title
+                        "${AppDestinations.ServiceDetails.route}/{serviceId}" -> service?.descricao?: "Detalhes"
                         else -> "EcoHaul Connect"
                     }
                     App(
@@ -88,12 +93,20 @@ class MainActivity : ComponentActivity() {
                         NavHost(navController = navController, startDestination = "services") {
                             composable(AppDestinations.Services.route) {
                                 ServiceListScreen(
-                                    services = sampleServiceList,
-                                    onNavigateToServiceDetails = { navController.navigate("serviceDetails") }
+                                    services = services,
+                                    onNavigateToServiceDetails = {service ->
+                                        navController.navigate(
+                                            "${AppDestinations.ServiceDetails.route}/${service.id}"
+                                        )
+                                    }
                                 )
                             }
-                            composable(AppDestinations.ServiceDetails.route) {
-                                ServiceDetailsScreen(service = sampleService)
+                            composable("${AppDestinations.ServiceDetails.route}/{serviceId}") { _ ->
+                                services.find { service ->
+                                    service.id == serviceId
+                                }?.let { service ->
+                                    ServiceDetailsScreen(service = service)
+                                } ?: LaunchedEffect(Unit) { navController.navigateUp() }
                             }
                             composable(AppDestinations.AddService.route) {
                                 Text(text = "Placeholder: Add service form")
@@ -125,15 +138,20 @@ fun App(
         topBar = {
             TopAppBar(
                 navigationIcon = {
-                    if(isShowNavigationIcon) {
-                        IconButton(onClick = {navController.navigateUp()}) {
-                            Icon(imageVector = Icons.Filled.ArrowBack, contentDescription = "voltar")
+                    if (isShowNavigationIcon) {
+                        IconButton(onClick = { navController.navigateUp() }) {
+                            Icon(
+                                imageVector = Icons.Filled.ArrowBack,
+                                contentDescription = "voltar"
+                            )
                         }
                     }
                 },
                 title = {
                     Text(
                         text = topBarTitle,
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis
                     )
                 },
                 colors = TopAppBarDefaults.topAppBarColors(
@@ -157,17 +175,4 @@ fun App(
         }
     }
 }
-
-@Preview
-@Composable
-fun AppPreview() {
-    val navController = rememberNavController()
-    EcoHaulConnectTheme {
-        Surface {
-            App(navController) {}
-        }
-    }
-}
-
-
 

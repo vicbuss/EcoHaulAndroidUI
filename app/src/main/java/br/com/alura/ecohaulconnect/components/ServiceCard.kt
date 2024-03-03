@@ -24,7 +24,6 @@ import br.com.alura.ecohaulconnect.extensions.toBrazilianCurrency
 import br.com.alura.ecohaulconnect.extensions.toBrazilianDateFormat
 import br.com.alura.ecohaulconnect.model.Service
 import br.com.alura.ecohaulconnect.sampledata.sampleService
-import br.com.alura.ecohaulconnect.ui.theme.ButtonColor
 import br.com.alura.ecohaulconnect.ui.theme.FontColor
 import br.com.alura.ecohaulconnect.ui.theme.Green40
 import br.com.alura.ecohaulconnect.ui.theme.White96
@@ -33,7 +32,7 @@ import br.com.alura.ecohaulconnect.ui.theme.White96
 fun ServiceCard(
     service: Service,
     modifier: Modifier = Modifier,
-    onNavigateToServiceDetails: () -> Unit = {}
+    onNavigateToServiceDetails: (service: Service) -> Unit = {}
 ) {
     Surface(
         shape = RoundedCornerShape(15.dp),
@@ -99,7 +98,7 @@ fun ServiceCard(
             Row(Modifier.padding(top = 32.dp, bottom = 16.dp, end = 16.dp, start = 16.dp)) {
                 Spacer(modifier = Modifier.weight(1f))
                 Button(
-                    onClick = {onNavigateToServiceDetails()},
+                    onClick = {onNavigateToServiceDetails(service)},
                     colors = ButtonDefaults.buttonColors(containerColor = Green40)
                 ) {
                     Text(text = "Detalhes")
