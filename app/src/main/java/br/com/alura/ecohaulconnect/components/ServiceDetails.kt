@@ -1,16 +1,12 @@
 package br.com.alura.ecohaulconnect.components
 
 import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.pager.HorizontalPager
@@ -27,18 +23,15 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.modifier.modifierLocalConsumer
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.lerp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.util.lerp
 import br.com.alura.ecohaulconnect.R
@@ -46,12 +39,10 @@ import br.com.alura.ecohaulconnect.extensions.toBrazilianCurrency
 import br.com.alura.ecohaulconnect.extensions.toBrazilianDateFormat
 import br.com.alura.ecohaulconnect.model.Service
 import br.com.alura.ecohaulconnect.sampledata.sampleService
-import br.com.alura.ecohaulconnect.sampledata.sampleServiceList
 import br.com.alura.ecohaulconnect.ui.theme.FontColor
 import br.com.alura.ecohaulconnect.ui.theme.Green40
 import br.com.alura.ecohaulconnect.ui.theme.White96
 import coil.compose.AsyncImage
-import java.math.BigDecimal
 import kotlin.math.absoluteValue
 
 @OptIn(ExperimentalFoundationApi::class)
@@ -92,7 +83,7 @@ fun ServiceDetails(
                     fontWeight = FontWeight(400)
                 )
                 Text(
-                    text = service.valor.toBrazilianCurrency(),
+                    text = service.value.toBrazilianCurrency(),
                     color = FontColor,
                     fontSize = 14.sp,
                     fontWeight = FontWeight(400)
@@ -107,7 +98,7 @@ fun ServiceDetails(
                     fontWeight = FontWeight(400)
                 )
                 Text(
-                    text = service.data.toBrazilianDateFormat(),
+                    text = service.date.toBrazilianDateFormat(),
                     color = FontColor,
                     fontSize = 14.sp,
                     fontWeight = FontWeight(400)
@@ -122,7 +113,7 @@ fun ServiceDetails(
                 fontWeight = FontWeight(400)
             )
             Text(
-                text = service.address,
+                text = "${service.address.street}, ${service.address.number}, ${service.address.complement}. ${service.address.neighborhood}, ${service.address.city}, ${service.address.state}",
                 color = FontColor,
                 fontSize = 14.sp,
                 fontWeight = FontWeight(400)

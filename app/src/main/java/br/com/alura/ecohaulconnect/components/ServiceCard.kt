@@ -46,7 +46,7 @@ fun ServiceCard(
         ) {
             Column(Modifier.padding(16.dp)) {
                 Text(
-                    text = service.descricao,
+                    text = service.description,
                     color = FontColor,
                     fontSize = 16.sp,
                     fontWeight = FontWeight(500),
@@ -71,7 +71,7 @@ fun ServiceCard(
                         fontWeight = FontWeight(400)
                     )
                     Text(
-                        text = service.valor.toBrazilianCurrency(),
+                        text = service.value.toBrazilianCurrency(),
                         modifier = Modifier.padding(top = 4.dp),
                         color = FontColor,
                         fontSize = 14.sp,
@@ -87,7 +87,7 @@ fun ServiceCard(
                         fontWeight = FontWeight(400)
                     )
                     Text(
-                        text = service.data.toBrazilianDateFormat(),
+                        text = service.date.toBrazilianDateFormat(),
                         modifier = Modifier.padding(top = 4.dp),
                         color = FontColor,
                         fontSize = 14.sp,

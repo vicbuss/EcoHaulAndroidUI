@@ -1,17 +1,28 @@
 package br.com.alura.ecohaulconnect.sampledata
 
+import br.com.alura.ecohaulconnect.model.Address
 import br.com.alura.ecohaulconnect.model.Item
 import br.com.alura.ecohaulconnect.model.Service
 import java.math.BigDecimal
 import java.time.LocalDate
 
-val sampleServiceList = listOf<Service>(
+val sampleAdress = Address(
+    street = "Praça da Sé",
+    neighborhood = "Sé",
+    zipCode = "01001-000",
+    city = "São Paulo",
+    state = "SP",
+    number = "2",
+    complement = "Ap 105"
+)
+
+val sampleServiceList = listOf(
     Service(
-        descricao = "Um sofá de dois lugares para descartar",
-        valor = BigDecimal("250.00"),
+        description = "Um sofá de dois lugares para descartar",
+        value = BigDecimal("250.00"),
         status = "ativo",
-        data = LocalDate.parse("2023-10-19"),
-        address = "Praça da Sé, 2, Ap 105. Sé, São Paulo, SP",
+        date = LocalDate.parse("2023-10-19"),
+        address = sampleAdress,
         items = listOf(
             Item(
                 pictureLinks = listOf(
@@ -23,17 +34,17 @@ val sampleServiceList = listOf<Service>(
                 heightInCm = 50,
                 widthInCm = 50,
                 lengthInCm = 120,
-                weightInGrams = 5000
+                weightInKilograms = 5000
 
             )
         ),
         category = "Móveis"
     ), Service(
-        descricao = "Um fogão para doar",
-        valor = BigDecimal("50"),
+        description = "Um fogão para doar",
+        value = BigDecimal("50"),
         status = "concluído",
-        data = LocalDate.parse("2023-05-01"),
-        address = "Praça da Sé, 2, Ap 105. Sé, São Paulo, SP",
+        date = LocalDate.parse("2023-05-01"),
+        address = sampleAdress,
         items = listOf(
             Item(
                 pictureLinks = listOf(
@@ -44,17 +55,17 @@ val sampleServiceList = listOf<Service>(
                 heightInCm = 50,
                 widthInCm = 50,
                 lengthInCm = 120,
-                weightInGrams = 10000
+                weightInKilograms = 10000
 
             )
         ),
         category = "Móveis"
     ), Service(
-        descricao = "Uma caixa de livros para doar",
-        valor = BigDecimal("50.00"),
+        description = "Uma caixa de livros para doar",
+        value = BigDecimal("50.00"),
         status = "concluído",
-        data = LocalDate.parse("2023-03-10"),
-        address = "Praça da Sé, 2, Ap 105. Sé, São Paulo, SP",
+        date = LocalDate.parse("2023-03-10"),
+        address = sampleAdress,
         items = listOf(
             Item(
                 pictureLinks = listOf(
@@ -66,7 +77,7 @@ val sampleServiceList = listOf<Service>(
                 heightInCm = 50,
                 widthInCm = 50,
                 lengthInCm = 120,
-                weightInGrams = 5000
+                weightInKilograms = 5000
 
             )
         ),
@@ -75,11 +86,11 @@ val sampleServiceList = listOf<Service>(
 )
 
 val sampleService = Service(
-        descricao = "Um sofá de dois lugares para descartar",
-        valor = BigDecimal("250.00"),
+        description = "Um sofá de dois lugares para descartar",
+        value = BigDecimal("250.00"),
         status = "ativo",
-        data = LocalDate.parse("2023-10-19"),
-        address = "Praça da Sé, 2, Ap 105. Sé, São Paulo, SP",
+        date = LocalDate.parse("2023-10-19"),
+        address = sampleAdress,
         items = listOf(
             Item(
                 pictureLinks = listOf(
@@ -91,7 +102,7 @@ val sampleService = Service(
                 heightInCm = 50,
                 widthInCm = 50,
                 lengthInCm = 120,
-                weightInGrams = 5000
+                weightInKilograms = 5000
 
             )
         ),

@@ -7,11 +7,11 @@ import java.util.UUID
 class Service(
     // TODO: Integrar com identificador no formato da api
     val id: String = UUID.randomUUID().toString(),
-    val descricao: String,
+    val description: String,
     val status: String,
-    val valor: BigDecimal,
-    val data: LocalDate,
-    val address: String,
+    val value: BigDecimal,
+    val date: LocalDate,
+    val address: Address,
     val items: List<Item>,
     val category: String
 )

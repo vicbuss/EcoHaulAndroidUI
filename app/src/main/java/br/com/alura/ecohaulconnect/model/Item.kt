@@ -6,7 +6,7 @@ class Item(
     val heightInCm: Int,
     val widthInCm: Int,
     val lengthInCm: Int,
-    val weightInGrams: Int
+    val weightInKilograms: Int
 ){
 
 }

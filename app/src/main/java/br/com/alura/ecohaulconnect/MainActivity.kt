@@ -34,6 +34,7 @@ import br.com.alura.ecohaulconnect.navigation.AppDestinations
 import br.com.alura.ecohaulconnect.navigation.bottomAppBarItems
 import br.com.alura.ecohaulconnect.sampledata.sampleServiceList
 import br.com.alura.ecohaulconnect.screens.ServiceDetailsScreen
+import br.com.alura.ecohaulconnect.screens.ServiceFormScreen
 import br.com.alura.ecohaulconnect.screens.ServiceListScreen
 import br.com.alura.ecohaulconnect.ui.theme.EcoHaulConnectTheme
 import br.com.alura.ecohaulconnect.ui.theme.White96
@@ -73,7 +74,7 @@ class MainActivity : ComponentActivity() {
                         AppDestinations.Services.route -> AppDestinations.Services.title
                         AppDestinations.AddService.route -> AppDestinations.AddService.title
                         AppDestinations.Notifications.route -> AppDestinations.Notifications.title
-                        "${AppDestinations.ServiceDetails.route}/{serviceId}" -> service?.descricao?: "Detalhes"
+                        "${AppDestinations.ServiceDetails.route}/{serviceId}" -> service?.description?: AppDestinations.ServiceDetails.title
                         else -> "EcoHaul Connect"
                     }
                     App(
@@ -109,7 +110,7 @@ class MainActivity : ComponentActivity() {
                                 } ?: LaunchedEffect(Unit) { navController.navigateUp() }
                             }
                             composable(AppDestinations.AddService.route) {
-                                Text(text = "Placeholder: Add service form")
+                                ServiceFormScreen()
                             }
                             composable(AppDestinations.Notifications.route) {
                                 Text(text = "Placeholder: Notifications screen")
