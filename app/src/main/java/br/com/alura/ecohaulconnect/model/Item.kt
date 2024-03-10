@@ -1,6 +1,6 @@
 package br.com.alura.ecohaulconnect.model
 
-class Item(
+data class Item(
     val pictureLinks: List<String>,
     val description: String,
     val heightInCm: Int,

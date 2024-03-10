@@ -1,6 +1,6 @@
 package br.com.alura.ecohaulconnect.model
 
-class Address(
+data class Address(
     val street: String,
     val neighborhood: String,
     val zipCode: String,

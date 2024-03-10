@@ -10,24 +10,25 @@ sealed class AppDestinations(val route: String, val title: String) {
     object Services: AppDestinations("services", "Meus serviços")
     object ServiceDetails: AppDestinations("serviceDetails", "Detalhes")
     object AddService: AppDestinations("addService", "Novo serviço")
+    object EditService: AppDestinations("editService", "Editar serviço")
     object Notifications: AppDestinations("notifications", "Notificações")
 
 }
 
 val bottomAppBarItems = listOf<NavBarItem>(
     NavBarItem(
-        label = "Meus serviços",
+        label = AppDestinations.Services.title,
         icon = Icons.Filled.Home,
-        route = "services"
+        route = AppDestinations.Services.route
     ),
     NavBarItem(
-        label = "Novo serviço",
+        label = AppDestinations.AddService.title,
         icon = Icons.Filled.AddCircle,
-        route = "addService"
+        route = AppDestinations.AddService.route
     ),
     NavBarItem(
-        label = "Notificações",
+        label = AppDestinations.Notifications.title,
         icon = Icons.Filled.Notifications,
-        route = "notifications"
+        route = AppDestinations.Notifications.route
     )
 )

@@ -4,7 +4,7 @@ import java.math.BigDecimal
 import java.time.LocalDate
 import java.util.UUID
 
-class Service(
+data class Service(
     // TODO: Integrar com identificador no formato da api
     val id: String = UUID.randomUUID().toString(),
     val description: String,

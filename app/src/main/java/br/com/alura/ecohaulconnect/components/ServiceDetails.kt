@@ -15,18 +15,25 @@ import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Warning
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.Divider
+import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
@@ -50,9 +57,23 @@ import kotlin.math.absoluteValue
 fun ServiceDetails(
     service: Service,
     modifier: Modifier = Modifier,
-    onEditService: () -> Unit = {},
-    onCancelService: () -> Unit = {}
+    onEditService: (service: Service) -> Unit = {},
+    onCancelService: (service: Service) -> Unit = {}
 ) {
+    var openAlertDialog by remember { mutableStateOf(false) }
+    if (openAlertDialog) {
+        CancelServiceDialog(
+            service = service,
+            onDismissRequest = { openAlertDialog = false },
+            onCancelService = {
+                openAlertDialog = false
+                onCancelService(service)
+            },
+            dialogTitle = "Cancelando o serviço",
+            dialogText = "Se você cancelar o serviço, ele não estará mais disponível para nossos parceiros, e, se ele já tiver sido aceito, você poderá ter que pagar uma taxa. Deseja cancelar mesmo assim?",
+            icon = Icons.Filled.Warning
+        )
+    }
     Column(
         modifier
             .fillMaxHeight()
@@ -137,7 +158,7 @@ fun ServiceDetails(
                     )
                 }
                 val pictures = item.pictureLinks
-                val pagerState = rememberPagerState(pageCount = {Int.MAX_VALUE})
+                val pagerState = rememberPagerState(pageCount = { Int.MAX_VALUE })
                 HorizontalPager(
                     state = pagerState,
                     pageSize = PageSize.Fixed(200.dp)
@@ -146,7 +167,7 @@ fun ServiceDetails(
                         mutableIntStateOf(page / pictures.size)
                     }
                     var listIndex by remember {
-                       mutableIntStateOf(page - pictures.size * quotient)
+                        mutableIntStateOf(page - pictures.size * quotient)
                     }
 
                     quotient = page / pictures.size
@@ -256,7 +277,7 @@ fun ServiceDetails(
         Row(Modifier.padding(bottom = 16.dp)) {
             Spacer(modifier = Modifier.weight(1f))
             Button(
-                onClick = {onEditService()},
+                onClick = { onEditService(service) },
                 Modifier
                     .padding(end = 8.dp)
                     .border(
@@ -272,7 +293,7 @@ fun ServiceDetails(
                 Text(text = "Editar")
             }
             Button(
-                onClick = {onCancelService()},
+                onClick = { openAlertDialog = true },
                 colors = ButtonDefaults.buttonColors(containerColor = Green40)
             ) {
                 Text(text = "Cancelar serviço")
@@ -281,9 +302,40 @@ fun ServiceDetails(
     }
 }
 
+@Composable
+fun CancelServiceDialog(
+    service: Service,
+    onDismissRequest: () -> Unit,
+    onCancelService: (service: Service) -> Unit,
+    dialogTitle: String,
+    dialogText: String,
+    icon: ImageVector
+) {
+    AlertDialog(
+        icon = {
+            Icon(imageVector = icon, contentDescription = null)
+        },
+        title = { Text(text = dialogTitle) },
+        text = { Text(dialogText) },
+        onDismissRequest = { onDismissRequest() },
+        confirmButton = {
+            TextButton(onClick = { onCancelService(service) }) {
+                Text(text = "Cancelar mesmo assim")
+            }
+        },
+        dismissButton = {
+            TextButton(onClick = { onDismissRequest() }) {
+                Text("Voltar")
+            }
+        }
+    )
+
+}
+
 @Preview
 @Composable
 fun ServiceDetailsPreview() {
     ServiceDetails(service = sampleService)
 
 }
+

@@ -1,6 +1,5 @@
 package br.com.alura.ecohaulconnect.components
 
-import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -30,6 +29,7 @@ import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -43,6 +43,8 @@ import br.com.alura.ecohaulconnect.extensions.toBrazilianDateFormat
 import br.com.alura.ecohaulconnect.model.Address
 import br.com.alura.ecohaulconnect.model.Item
 import br.com.alura.ecohaulconnect.model.Service
+import br.com.alura.ecohaulconnect.sampledata.sampleService
+import br.com.alura.ecohaulconnect.ui.theme.EcoHaulConnectTheme
 import br.com.alura.ecohaulconnect.ui.theme.Green40
 import br.com.alura.ecohaulconnect.ui.theme.IconColor
 import br.com.alura.ecohaulconnect.ui.theme.SurfaceContainerHighest
@@ -55,73 +57,74 @@ import java.time.format.DateTimeFormatter
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ServiceForm(
+fun EditServiceForm(
     modifier: Modifier = Modifier,
-    onAddService: (service: Service) -> Unit = {}
+    serviceToEdit: Service,
+    onEditService: (Service) -> Unit = {},
 ) {
     var value by remember {
-        mutableStateOf("")
+        mutableStateOf(serviceToEdit.value.toPlainString())
     }
     val dateFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy")
     var pickedDate by remember {
-        mutableStateOf(LocalDate.now())
+        mutableStateOf(serviceToEdit.date)
     }
     var date by remember {
         mutableStateOf(pickedDate.toBrazilianDateFormat())
     }
     var description by remember {
-        mutableStateOf("")
+        mutableStateOf(serviceToEdit.description)
     }
     var street by remember {
-        mutableStateOf("")
+        mutableStateOf(serviceToEdit.address.street)
     }
     var city by remember {
-        mutableStateOf("")
+        mutableStateOf(serviceToEdit.address.city)
     }
     var state by remember {
-        mutableStateOf("")
+        mutableStateOf(serviceToEdit.address.state)
     }
     var number by remember {
-        mutableStateOf("")
+        mutableStateOf(serviceToEdit.address.number)
     }
     var neighborhood by remember {
-        mutableStateOf("")
+        mutableStateOf(serviceToEdit.address.neighborhood)
     }
     var complement by remember {
-        mutableStateOf("")
+        mutableStateOf(serviceToEdit.address.complement)
     }
     var zipCode by remember {
-        mutableStateOf("")
-    }
-    var itemQty by remember {
-        mutableStateOf("1")
+        mutableStateOf(serviceToEdit.address.zipCode)
     }
     var itemDescription by remember {
-        mutableStateOf("")
+        mutableStateOf(serviceToEdit.items.first().description)
     }
     var itemCategory by remember {
-        mutableStateOf("")
+        mutableStateOf(serviceToEdit.category)
     }
     var itemHeight by remember {
-        mutableStateOf("")
+        mutableStateOf(serviceToEdit.items.first().heightInCm.toString())
     }
     var itemWidth by remember {
-        mutableStateOf("")
+        mutableStateOf(serviceToEdit.items.first().widthInCm.toString())
     }
     var itemLength by remember {
-        mutableStateOf("")
+        mutableStateOf(serviceToEdit.items.first().lengthInCm.toString())
     }
     var itemWeight by remember {
-        mutableStateOf("")
+        mutableStateOf(serviceToEdit.items.first().weightInKilograms.toString())
+    }
+    var numberOfItems by remember {
+        mutableIntStateOf(serviceToEdit.items.first().pictureLinks.size)
     }
     var itemImage by remember {
-        mutableStateOf("")
+        mutableStateOf(if(numberOfItems >= 1) serviceToEdit.items.first().pictureLinks[0] else "")
     }
     var itemImage2 by remember {
-        mutableStateOf("")
+        mutableStateOf(if(numberOfItems >= 2) serviceToEdit.items.first().pictureLinks[1] else "")
     }
     var itemImage3 by remember {
-        mutableStateOf("")
+        mutableStateOf(if (numberOfItems >= 3) serviceToEdit.items.first().pictureLinks[2] else "")
     }
 
     Column(
@@ -140,6 +143,19 @@ fun ServiceForm(
                 tint = IconColor
             )
             Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                TextField(
+                    value = description,
+                    onValueChange = { description = it },
+                    colors = TextFieldDefaults.colors(
+                        unfocusedContainerColor = SurfaceContainerHighest,
+                        focusedContainerColor = SurfaceContainerHighest,
+                        focusedIndicatorColor = Green40,
+                        focusedLabelColor = Green40,
+                        cursorColor = Green40
+                    ),
+                    modifier = Modifier.fillMaxWidth(),
+                    label = { Text("Descrição") }
+                )
                 TextField(
                     value = value,
                     onValueChange = { value = it },
@@ -186,19 +202,7 @@ fun ServiceForm(
 
 
 
-                TextField(
-                    value = description,
-                    onValueChange = { description = it },
-                    colors = TextFieldDefaults.colors(
-                        unfocusedContainerColor = SurfaceContainerHighest,
-                        focusedContainerColor = SurfaceContainerHighest,
-                        focusedIndicatorColor = Green40,
-                        focusedLabelColor = Green40,
-                        cursorColor = Green40
-                    ),
-                    modifier = Modifier.fillMaxWidth(),
-                    label = { Text("Descrição") }
-                )
+
                 TextField(
                     value = date,
                     onValueChange = { date = it },
@@ -376,7 +380,7 @@ fun ServiceForm(
                         cursorColor = Green40
                     ),
                     modifier = Modifier.fillMaxWidth(),
-                    label = { Text("Item") },
+                    label = { Text("Descrição do item") },
                     keyboardOptions = KeyboardOptions(
                         keyboardType = KeyboardType.Text,
                         imeAction = ImeAction.Next
@@ -413,8 +417,9 @@ fun ServiceForm(
                         ),
                         modifier = Modifier.fillMaxWidth(0.5f),
                         label = { Text("Altura") },
+                        placeholder = { Text(text = "Altura em centímetros") },
                         keyboardOptions = KeyboardOptions(
-                            keyboardType = KeyboardType.Text,
+                            keyboardType = KeyboardType.Number,
                             imeAction = ImeAction.Next
                         )
                     )
@@ -431,8 +436,9 @@ fun ServiceForm(
                         ),
                         modifier = Modifier.fillMaxWidth(1f),
                         label = { Text("Largura") },
+                        placeholder = { Text(text = "Largura em centímetros") },
                         keyboardOptions = KeyboardOptions(
-                            keyboardType = KeyboardType.Text,
+                            keyboardType = KeyboardType.Number,
                             imeAction = ImeAction.Next
                         )
                     )
@@ -451,8 +457,9 @@ fun ServiceForm(
                         ),
                         modifier = Modifier.fillMaxWidth(0.5f),
                         label = { Text("Comprimento") },
+                        placeholder = { Text(text = "Comprimento em centímetros") },
                         keyboardOptions = KeyboardOptions(
-                            keyboardType = KeyboardType.Text,
+                            keyboardType = KeyboardType.Number,
                             imeAction = ImeAction.Next
                         )
                     )
@@ -469,8 +476,9 @@ fun ServiceForm(
                         ),
                         modifier = Modifier.fillMaxWidth(1f),
                         label = { Text("Peso") },
+                        placeholder = { Text(text = "Peso em kg") },
                         keyboardOptions = KeyboardOptions(
-                            keyboardType = KeyboardType.Text,
+                            keyboardType = KeyboardType.Number,
                             imeAction = ImeAction.Next
                         )
                     )
@@ -542,9 +550,12 @@ fun ServiceForm(
                         complement = complement,
                         zipCode = zipCode
                     )
+                    val pictureLinks = mutableListOf(itemImage)
+                    if (itemImage2 != "") pictureLinks.add(itemImage2)
+                    if (itemImage3 != "") pictureLinks.add(itemImage3)
                     val itemList = listOf(
                         Item(
-                            pictureLinks = listOf(itemImage, itemImage2, itemImage3),
+                            pictureLinks = pictureLinks.toList(),
                             description = itemDescription,
                             heightInCm = itemHeight.toInt(),
                             widthInCm = itemWidth.toInt(),
@@ -553,6 +564,7 @@ fun ServiceForm(
                         )
                     )
                     val service = Service(
+                        id = serviceToEdit.id,
                         category = itemCategory,
                         date = LocalDate.parse(date, dateFormatter),
                         description = description,
@@ -561,19 +573,22 @@ fun ServiceForm(
                         address = address,
                         status = "ativo"
                     )
-                    onAddService(service)
+                    onEditService(service)
                 },
                 colors = ButtonDefaults.buttonColors(containerColor = Green40)
             ) {
-                Text(text = "Adicionar")
+                val buttonText = "Editar"
+                Text(text = buttonText)
             }
         }
         Spacer(Modifier)
     }
 }
 
-@Preview(showBackground = true)
+@Preview
 @Composable
-fun ServiceFormPreview() {
-    ServiceForm()
+fun EditServiceFormPreview() {
+    EcoHaulConnectTheme {
+        EditServiceForm(serviceToEdit = sampleService)
+    }
 }
