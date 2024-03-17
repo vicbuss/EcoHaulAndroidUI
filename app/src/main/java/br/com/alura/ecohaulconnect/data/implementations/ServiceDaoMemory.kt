@@ -4,7 +4,7 @@ import br.com.alura.ecohaulconnect.data.contracts.IServiceDao
 import br.com.alura.ecohaulconnect.model.Service
 import br.com.alura.ecohaulconnect.sampledata.sampleServiceList
 
-class ServiceDaoTest: IServiceDao {
+class ServiceDaoMemory: IServiceDao {
     override fun listServices(): List<Service> {
         return serviceList.toList()
     }

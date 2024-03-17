@@ -47,7 +47,7 @@ class MainActivity : ComponentActivity() {
             val navController = rememberNavController()
             val backStackEntryState by navController.currentBackStackEntryAsState()
             val currentDestination = backStackEntryState?.destination
-            val dao = ServiceDaoFactory.getDao("test")
+            val dao = ServiceDaoFactory.getDao("memory")
             val services = dao.listServices()
             EcoHaulConnectTheme {
                 Surface(modifier = Modifier.fillMaxSize(), color = White96) {
