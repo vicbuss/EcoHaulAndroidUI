@@ -24,10 +24,12 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.navigation.NavController
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
 import br.com.alura.ecohaulconnect.components.EcoHaulBottomNavBar
 import br.com.alura.ecohaulconnect.components.NavBarItem
 import br.com.alura.ecohaulconnect.data.ServiceDaoFactory
@@ -68,7 +70,7 @@ class MainActivity : ComponentActivity() {
                         AppDestinations.Services.route -> false
                         else -> true
                     }
-                    val serviceId = backStackEntryState?.arguments?.getString("serviceId")
+                    val serviceId = backStackEntryState?.arguments?.getLong("serviceId")
                     val service = services.find { service ->
                         service.id == serviceId
                     }
@@ -109,9 +111,13 @@ class MainActivity : ComponentActivity() {
                                     }
                                 )
                             }
-                            composable("${AppDestinations.ServiceDetails.route}/{serviceId}") { _ ->
+                            composable(
+                                "${AppDestinations.ServiceDetails.route}/{serviceId}",
+                                arguments = listOf(navArgument("serviceId") {type = NavType.LongType})
+                            ) { _ ->
+                                val id = backStackEntryState?.arguments?.getLong("serviceId")
                                 services.find { service ->
-                                    service.id == serviceId
+                                    service.id == id
                                 }?.let { service ->
                                     ServiceDetailsScreen(
                                         service = service,
@@ -133,9 +139,13 @@ class MainActivity : ComponentActivity() {
                                     }
                                 )
                             }
-                            composable("${AppDestinations.EditService.route}/{serviceId}") {
+                            composable(
+                                "${AppDestinations.EditService.route}/{serviceId}",
+                                arguments = listOf(navArgument("serviceId") {type = NavType.LongType})
+                            ) {
+                                val id = backStackEntryState?.arguments?.getLong("serviceId")
                                 services.find { service ->
-                                    service.id == serviceId
+                                    service.id == id
                                 }?.let {
                                     EditServiceFormScreen(
                                         serviceToEdit = it,

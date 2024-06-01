@@ -34,7 +34,7 @@ class ServiceDaoApi : IServiceDao {
     }
 
     override fun editService(service: Service): Service {
-        val call = ApiClient.apiService.editUserService(service.id, service)
+        val call = ApiClient.apiService.editUserService(service.id!!, service)
         var updatedService = service
 
         call.enqueue(object : Callback<Service> {

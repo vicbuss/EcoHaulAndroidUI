@@ -20,10 +20,10 @@ interface ApiService {
 
     @PUT("servicos/{idServico}")
     fun editUserService(
-        @Path("idServico") serviceId: String,
+        @Path("idServico") serviceId: Long,
         @Body body: Service
     ): Call<Service>
 
     @PATCH("servicos/cancelar/{idServico}")
-    fun cancelUserService(@Path("idServico") serviceId: String): Call<Service>
+    fun cancelUserService(@Path("idServico") serviceId: Long): Call<Service>
 }
