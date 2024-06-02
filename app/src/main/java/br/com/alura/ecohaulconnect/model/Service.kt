@@ -7,7 +7,7 @@ import java.util.UUID
 
 data class Service(
     // TODO: Integrar com identificador no formato da api
-    val id: Long = 0,
+    val id: Long = 0L,
     val description: String,
     val status: String,
     val value: BigDecimal,

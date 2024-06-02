@@ -17,28 +17,20 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.navigation.NavController
-import androidx.navigation.NavType
-import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import androidx.navigation.navArgument
 import br.com.alura.ecohaulconnect.components.EcoHaulBottomNavBar
 import br.com.alura.ecohaulconnect.components.NavBarItem
 import br.com.alura.ecohaulconnect.data.ServiceDaoFactory
 import br.com.alura.ecohaulconnect.navigation.AppDestinations
+import br.com.alura.ecohaulconnect.navigation.ServiceDetails
 import br.com.alura.ecohaulconnect.navigation.bottomAppBarItems
-import br.com.alura.ecohaulconnect.screens.ServiceDetailsScreen
-import br.com.alura.ecohaulconnect.screens.AddServiceFormScreen
-import br.com.alura.ecohaulconnect.screens.EditServiceFormScreen
-import br.com.alura.ecohaulconnect.screens.ServiceListScreen
 import br.com.alura.ecohaulconnect.ui.theme.EcoHaulConnectTheme
 import br.com.alura.ecohaulconnect.ui.theme.White96
 
@@ -76,10 +68,10 @@ class MainActivity : ComponentActivity() {
                     }
                     val topBarTitle = when (currentDestination?.route) {
                         AppDestinations.Services.route -> AppDestinations.Services.title
-                        AppDestinations.AddService.route -> AppDestinations.AddService.title
+                        // AppDestinations.AddService.route -> AppDestinations.AddService.title
                         AppDestinations.Notifications.route -> AppDestinations.Notifications.title
-                        "${AppDestinations.ServiceDetails.route}/{serviceId}" -> service?.description
-                            ?: AppDestinations.ServiceDetails.title
+                        "${ServiceDetails.route}/{serviceId}" -> service?.description
+                            ?: ServiceDetails.title
 
                         else -> "EcoHaul Connect"
                     }
@@ -97,70 +89,7 @@ class MainActivity : ComponentActivity() {
                         isShowNavigationIcon = isShowNavigationIcon,
                         isShowBottomBar = isContainedInBottomBarItems
                     ) {
-                        NavHost(
-                            navController = navController,
-                            startDestination = AppDestinations.Services.route
-                        ) {
-                            composable(AppDestinations.Services.route) {
-                                ServiceListScreen(
-                                    services = services,
-                                    onNavigateToServiceDetails = { service ->
-                                        navController.navigate(
-                                            "${AppDestinations.ServiceDetails.route}/${service.id}"
-                                        )
-                                    }
-                                )
-                            }
-                            composable(
-                                "${AppDestinations.ServiceDetails.route}/{serviceId}",
-                                arguments = listOf(navArgument("serviceId") {type = NavType.LongType})
-                            ) { _ ->
-                                val id = backStackEntryState?.arguments?.getLong("serviceId")
-                                services.find { service ->
-                                    service.id == id
-                                }?.let { service ->
-                                    ServiceDetailsScreen(
-                                        service = service,
-                                        onCancelService = {
-                                            dao.removeService(service)
-                                            navController.navigateUp()
-                                        },
-                                        onEditService = {
-                                            navController.navigate("${AppDestinations.EditService.route}/${it.id}")
-                                        }
-                                    )
-                                } ?: LaunchedEffect(Unit) { navController.navigateUp() }
-                            }
-                            composable(AppDestinations.AddService.route) {
-                                AddServiceFormScreen(
-                                    onAddService = {
-                                        dao.addService(it)
-                                        navController.navigate(AppDestinations.Services.route)
-                                    }
-                                )
-                            }
-                            composable(
-                                "${AppDestinations.EditService.route}/{serviceId}",
-                                arguments = listOf(navArgument("serviceId") {type = NavType.LongType})
-                            ) {
-                                val id = backStackEntryState?.arguments?.getLong("serviceId")
-                                services.find { service ->
-                                    service.id == id
-                                }?.let {
-                                    EditServiceFormScreen(
-                                        serviceToEdit = it,
-                                        onEditService = { service ->
-                                            dao.editService(service)
-                                            navController.navigateUp()
-                                        }
-                                    )
-                                } ?: LaunchedEffect(Unit) { navController.navigateUp() }
-                            }
-                            composable(AppDestinations.Notifications.route) {
-                                Text(text = "Placeholder: Notifications screen")
-                            }
-                        }
-
+                        EcoHaulNavHost(navController = navController)
                     }
                 }
             }
