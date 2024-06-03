@@ -1,4 +1,4 @@
-package br.com.alura.ecohaulconnect.components
+package br.com.alura.ecohaulconnect.ui.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -29,6 +29,7 @@ import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -42,6 +43,7 @@ import br.com.alura.ecohaulconnect.extensions.toBrazilianDateFormat
 import br.com.alura.ecohaulconnect.model.Address
 import br.com.alura.ecohaulconnect.model.Item
 import br.com.alura.ecohaulconnect.model.Service
+import br.com.alura.ecohaulconnect.sampledata.sampleService
 import br.com.alura.ecohaulconnect.ui.theme.EcoHaulConnectTheme
 import br.com.alura.ecohaulconnect.ui.theme.Green40
 import br.com.alura.ecohaulconnect.ui.theme.IconColor
@@ -55,70 +57,74 @@ import java.time.format.DateTimeFormatter
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun AddServiceForm(
+fun EditServiceForm(
     modifier: Modifier = Modifier,
-    onAddService: (Service) -> Unit = {},
+    serviceToEdit: Service,
+    onEditService: (Service) -> Unit = {},
 ) {
     var value by remember {
-        mutableStateOf("")
+        mutableStateOf(serviceToEdit.value.toPlainString())
     }
     val dateFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy")
     var pickedDate by remember {
-        mutableStateOf(LocalDate.now())
+        mutableStateOf(serviceToEdit.date)
     }
     var date by remember {
         mutableStateOf(pickedDate.toBrazilianDateFormat())
     }
     var description by remember {
-        mutableStateOf("")
+        mutableStateOf(serviceToEdit.description)
     }
     var street by remember {
-        mutableStateOf("")
+        mutableStateOf(serviceToEdit.address.street)
     }
     var city by remember {
-        mutableStateOf("")
+        mutableStateOf(serviceToEdit.address.city)
     }
     var state by remember {
-        mutableStateOf("")
+        mutableStateOf(serviceToEdit.address.state)
     }
     var number by remember {
-        mutableStateOf("")
+        mutableStateOf(serviceToEdit.address.number)
     }
     var neighborhood by remember {
-        mutableStateOf("")
+        mutableStateOf(serviceToEdit.address.neighborhood)
     }
     var complement by remember {
-        mutableStateOf("")
+        mutableStateOf(serviceToEdit.address.complement)
     }
     var zipCode by remember {
-        mutableStateOf("")
+        mutableStateOf(serviceToEdit.address.zipCode)
     }
     var itemDescription by remember {
-        mutableStateOf("")
+        mutableStateOf(serviceToEdit.items.first().description)
     }
     var itemCategory by remember {
-        mutableStateOf("")
+        mutableStateOf(serviceToEdit.category)
     }
     var itemHeight by remember {
-        mutableStateOf("")
+        mutableStateOf(serviceToEdit.items.first().heightInCm.toString())
     }
     var itemWidth by remember {
-        mutableStateOf("")
+        mutableStateOf(serviceToEdit.items.first().widthInCm.toString())
     }
     var itemLength by remember {
-        mutableStateOf("")
+        mutableStateOf(serviceToEdit.items.first().lengthInCm.toString())
     }
     var itemWeight by remember {
-        mutableStateOf("")
+        mutableStateOf(serviceToEdit.items.first().weightInKilograms.toString())
+    }
+    var numberOfItems by remember {
+        mutableIntStateOf(serviceToEdit.items.first().pictureLinks.size)
     }
     var itemImage by remember {
-        mutableStateOf("")
+        mutableStateOf(if(numberOfItems >= 1) serviceToEdit.items.first().pictureLinks[0] else "")
     }
     var itemImage2 by remember {
-        mutableStateOf("")
+        mutableStateOf(if(numberOfItems >= 2) serviceToEdit.items.first().pictureLinks[1] else "")
     }
     var itemImage3 by remember {
-        mutableStateOf("")
+        mutableStateOf(if (numberOfItems >= 3) serviceToEdit.items.first().pictureLinks[2] else "")
     }
 
     Column(
@@ -558,6 +564,7 @@ fun AddServiceForm(
                         )
                     )
                     val service = Service(
+                        id = serviceToEdit.id,
                         category = itemCategory,
                         date = LocalDate.parse(date, dateFormatter),
                         description = description,
@@ -566,11 +573,11 @@ fun AddServiceForm(
                         address = address,
                         status = "ativo"
                     )
-                    onAddService(service)
+                    onEditService(service)
                 },
                 colors = ButtonDefaults.buttonColors(containerColor = Green40)
             ) {
-                val buttonText = "Adicionar"
+                val buttonText = "Editar"
                 Text(text = buttonText)
             }
         }
@@ -578,10 +585,10 @@ fun AddServiceForm(
     }
 }
 
-@Preview(showBackground = true)
+@Preview
 @Composable
-fun ServiceAddFormPreview() {
+fun EditServiceFormPreview() {
     EcoHaulConnectTheme {
-        AddServiceForm()
+        EditServiceForm(serviceToEdit = sampleService)
     }
 }

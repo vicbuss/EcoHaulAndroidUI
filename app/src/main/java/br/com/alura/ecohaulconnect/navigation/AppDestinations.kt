@@ -6,7 +6,7 @@ import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Notifications
 import androidx.navigation.NavType
 import androidx.navigation.navArgument
-import br.com.alura.ecohaulconnect.components.NavBarItem
+import br.com.alura.ecohaulconnect.ui.components.NavBarItem
 
 sealed class AppDestinations(val route: String, val title: String) {
     object Services: AppDestinations("services", "Meus serviços")
@@ -50,7 +50,7 @@ val bottomAppBarItems = listOf<NavBarItem>(
     NavBarItem(
         label = ServiceForm.title,
         icon = Icons.Filled.AddCircle,
-        route = ServiceForm.route
+        route = "${ServiceForm.route}/${0L}"
     ),
     NavBarItem(
         label = AppDestinations.Notifications.title,

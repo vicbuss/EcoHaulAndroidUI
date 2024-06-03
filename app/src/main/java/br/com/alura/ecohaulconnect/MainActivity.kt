@@ -25,8 +25,8 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.navigation.NavController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import br.com.alura.ecohaulconnect.components.EcoHaulBottomNavBar
-import br.com.alura.ecohaulconnect.components.NavBarItem
+import br.com.alura.ecohaulconnect.ui.components.EcoHaulBottomNavBar
+import br.com.alura.ecohaulconnect.ui.components.NavBarItem
 import br.com.alura.ecohaulconnect.data.ServiceDaoFactory
 import br.com.alura.ecohaulconnect.navigation.AppDestinations
 import br.com.alura.ecohaulconnect.navigation.ServiceDetails

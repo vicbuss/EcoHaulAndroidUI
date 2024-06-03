@@ -1,4 +1,4 @@
-package br.com.alura.ecohaulconnect.components
+package br.com.alura.ecohaulconnect.ui.components
 
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar

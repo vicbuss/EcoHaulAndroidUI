@@ -6,7 +6,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
 import br.com.alura.ecohaulconnect.navigateToServiceForm
 import br.com.alura.ecohaulconnect.sampledata.sampleServiceList
-import br.com.alura.ecohaulconnect.screens.ServiceDetailsScreen
+import br.com.alura.ecohaulconnect.ui.screens.ServiceDetailsScreen
 
 fun NavGraphBuilder.serviceDetailsGraph(
     navController: NavHostController

@@ -1,4 +1,4 @@
-package br.com.alura.ecohaulconnect.components
+package br.com.alura.ecohaulconnect.ui.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
@@ -32,7 +32,7 @@ import br.com.alura.ecohaulconnect.ui.theme.White96
 fun ServiceCard(
     service: Service,
     modifier: Modifier = Modifier,
-    onNavigateToServiceDetails: (service: Service) -> Unit = {}
+    onNavigateToServiceDetails: (service: Service) -> Unit = {},
 ) {
     Surface(
         shape = RoundedCornerShape(15.dp),
