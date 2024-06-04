@@ -1,5 +1,6 @@
 package br.com.alura.ecohaulconnect.ui.viewModels
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import br.com.alura.ecohaulconnect.data.ServiceDao
@@ -27,6 +28,7 @@ class ServiceDetailsScreenViewModel(private val serviceId: Long): ViewModel() {
             _uiState.value = _uiState.value.copy(
                 service = it
             )
+            Log.i("ServiceDetails", "loadService: $service")
         }
     }
 

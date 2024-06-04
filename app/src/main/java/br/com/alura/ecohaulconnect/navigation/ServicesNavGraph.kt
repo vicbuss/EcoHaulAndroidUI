@@ -26,7 +26,7 @@ fun NavGraphBuilder.servicesGraph(
             ServiceListScreen(
                 state = state,
                 onNavigateToServiceDetails = { serviceId ->
-                    navController.navigateToServiceDetails(serviceId)
+                    navController.navigate("${ServiceDetails.route}/$serviceId")
                 }
             )
         }

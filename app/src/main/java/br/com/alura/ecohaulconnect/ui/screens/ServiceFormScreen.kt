@@ -73,7 +73,7 @@ fun ServiceFormScreen(
         val images = state.itemImages
         val itemImage = images.getOrElse(0) { "" }
         val itemImage2 = images.getOrElse(1) { "" }
-        val itemImage3 = images.getOrElse(3) { "" }
+        val itemImage3 = images.getOrElse(2) { "" }
 
         Column(
             modifier

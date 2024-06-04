@@ -1,5 +1,6 @@
 package br.com.alura.ecohaulconnect.ui.viewModels
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import br.com.alura.ecohaulconnect.data.ServiceDao
 import br.com.alura.ecohaulconnect.extensions.toBrazilianCurrency
@@ -170,9 +171,21 @@ class ServiceFormScreenViewModel(private val serviceId: Long) : ViewModel() {
                     itemWidth = items[0].widthInCm.toString(),
                     itemLength = items[0].lengthInCm.toString(),
                     itemWeight = items[0].weightInKilograms.toString(),
-                    itemImages = items[0].pictureLinks
+                    itemImages = populateItemListForDisplay(items[0].pictureLinks)
                 )
             }
+        }
+    }
+
+    private fun populateItemListForDisplay(itemImages: List<String>): List<String> {
+        return if (itemImages.size == 3) {
+            itemImages
+        } else {
+            val populatedList = mutableListOf("", "", "")
+            for (i in itemImages.indices) {
+                populatedList[i] = itemImages[i]
+            }
+            populatedList.toList()
         }
     }
 
@@ -199,13 +212,15 @@ class ServiceFormScreenViewModel(private val serviceId: Long) : ViewModel() {
                     heightInCm = itemHeight.toInt(),
                 )
             )
+            val formattedValue = value.replace("R$", "").replace(",", ".").trim()
+            Log.i("ServiceFormViewModel", "createOrEditService: $formattedValue")
             val service = Service(
                 id = serviceId,
                 category = itemCategory,
                 description = description,
                 // alterar para pegar do form
                 status = "ativo",
-                value = BigDecimal(value),
+                value = BigDecimal(formattedValue),
                 date = parseStringToDate(date),
                 address = address,
                 items = itemList
