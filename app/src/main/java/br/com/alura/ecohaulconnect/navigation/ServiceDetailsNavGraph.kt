@@ -23,7 +23,7 @@ fun NavGraphBuilder.serviceDetailsGraph(
             val viewModel: ServiceDetailsScreenViewModel =
                 viewModel(factory = EcoHaulViewModelFactory(id))
             val state by viewModel.uiState.collectAsState()
-            state.service?.let { service ->
+            state.service?.let {
                 ServiceDetailsScreen(
                     state = state,
                     onEditService = {
@@ -32,7 +32,8 @@ fun NavGraphBuilder.serviceDetailsGraph(
                     onCancelService = {
                         viewModel.removeService()
                         navController.popBackStack()
-                    }
+                    },
+                    onClickArrowBack = {navController.popBackStack()}
                 )
             } ?: LaunchedEffect(Unit) { navController.popBackStack() }
         }

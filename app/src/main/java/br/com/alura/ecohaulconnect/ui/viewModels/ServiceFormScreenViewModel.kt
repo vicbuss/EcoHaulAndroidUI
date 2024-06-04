@@ -154,6 +154,7 @@ class ServiceFormScreenViewModel(private val serviceId: Long) : ViewModel() {
             this.persistenceStrategy = PersistenceStrategy.UPDATE
             with(it) {
                 _uiState.value = _uiState.value.copy(
+                    topBarTitle = "Editar serviço",
                     value = value.toBrazilianCurrency(),
                     pickedDate = date,
                     date = date.toBrazilianDateFormat(),

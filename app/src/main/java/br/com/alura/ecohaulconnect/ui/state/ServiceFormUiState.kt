@@ -1,10 +1,9 @@
 package br.com.alura.ecohaulconnect.ui.state
 
-import br.com.alura.ecohaulconnect.extensions.toBrazilianCurrency
 import br.com.alura.ecohaulconnect.extensions.toBrazilianDateFormat
-import br.com.alura.ecohaulconnect.model.Service
+import br.com.alura.ecohaulconnect.navigation.bottomAppBarItems
+import br.com.alura.ecohaulconnect.ui.components.NavBarItem
 import java.time.LocalDate
-import java.time.format.DateTimeFormatter
 
 
 data class ServiceFormUiState(
@@ -49,6 +48,11 @@ data class ServiceFormUiState(
     val onSecondImageChange: (String) -> Unit = {},
     val onThirdImageChange: (String) -> Unit = {},
     val onOpenDialog: (Boolean) -> Unit = {},
-    val onCloseDialog: (Boolean) -> Unit = {}
+    val onCloseDialog: (Boolean) -> Unit = {},
+
+    val showBottomBar: Boolean = true,
+    val selectedBottomNavBarItem: NavBarItem = bottomAppBarItems[1],
+    val topBarTitle: String = "Criar um serviço"
+
 
 )

@@ -10,29 +10,34 @@ import androidx.compose.ui.tooling.preview.Preview
 import br.com.alura.ecohaulconnect.ui.components.ServiceDetails
 import br.com.alura.ecohaulconnect.model.Service
 import br.com.alura.ecohaulconnect.sampledata.sampleService
+import br.com.alura.ecohaulconnect.ui.components.EcoHaulScaffolding
+import br.com.alura.ecohaulconnect.ui.state.ServiceDetailsUiState
 import br.com.alura.ecohaulconnect.ui.theme.White96
-
-data class ServiceDetailsUiState (
-    val service: Service? = null
-)
 
 @Composable
 fun ServiceDetailsScreen(
     state: ServiceDetailsUiState,
     onCancelService: (service: Service) -> Unit = {},
-    onEditService: (service: Service) -> Unit = {}
+    onEditService: (service: Service) -> Unit = {},
+    onClickArrowBack: () -> Unit = {}
     ) {
-    val service = state.service
-    service?.let {
-        Column(
-            Modifier
-                .fillMaxSize()
-                .background(White96)) {
-            Spacer(Modifier)
-            ServiceDetails(service, onEditService = onEditService, onCancelService = onCancelService)
-            Spacer(Modifier)
+    EcoHaulScaffolding(
+        onClickArrowBack = onClickArrowBack,
+        topBarTitle = state.topBarTitle
+    ) {
+        val service = state.service
+        service?.let {
+            Column(
+                Modifier
+                    .fillMaxSize()
+                    .background(White96)) {
+                Spacer(Modifier)
+                ServiceDetails(service, onEditService = onEditService, onCancelService = onCancelService)
+                Spacer(Modifier)
+            }
         }
     }
+
 
 }
 

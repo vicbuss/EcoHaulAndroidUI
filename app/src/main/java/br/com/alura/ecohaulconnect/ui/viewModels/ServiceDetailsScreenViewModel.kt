@@ -4,7 +4,7 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import br.com.alura.ecohaulconnect.data.ServiceDao
-import br.com.alura.ecohaulconnect.ui.screens.ServiceDetailsUiState
+import br.com.alura.ecohaulconnect.ui.state.ServiceDetailsUiState
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 
@@ -26,7 +26,8 @@ class ServiceDetailsScreenViewModel(private val serviceId: Long): ViewModel() {
         val service = dao.getServiceById(serviceId)
         service?.let {
             _uiState.value = _uiState.value.copy(
-                service = it
+                service = it,
+                topBarTitle = it.description
             )
             Log.i("ServiceDetails", "loadService: $service")
         }

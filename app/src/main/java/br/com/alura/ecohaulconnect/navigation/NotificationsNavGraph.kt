@@ -4,11 +4,26 @@ import androidx.compose.material3.Text
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
+import br.com.alura.ecohaulconnect.ui.components.EcoHaulScaffolding
 
 fun NavGraphBuilder.notificationsGraph(
     navController: NavHostController
 ) {
     composable(AppDestinations.Notifications.route) {
-        Text(text = "Placeholder: Notifications screen")
+        EcoHaulScaffolding(
+            topBarTitle = "Notificações",
+            showBottomBar = true,
+            selectedBottomNavBarItem = bottomAppBarItems[2],
+            onClickArrowBack = {navController.popBackStack()},
+            onBottomNavBarSelectedItemChange = {
+                val route = it.route
+                navController.navigate(route) {
+                    launchSingleTop = true
+                    popUpTo(route)
+                }
+            }
+        ) {
+            Text(text = "Placeholder: Notifications screen")
+        }
     }
 }

@@ -25,6 +25,14 @@ fun NavGraphBuilder.serviceFormGraph(
                 onClickSave = {
                     viewModel.createOrEditService()
                     navController.popBackStack()
+                },
+                onClickArrowBack = {navController.popBackStack()},
+                onBottomNavBarSelectedItemChange = {
+                    val route = it.route
+                    navController.navigate(route) {
+                        launchSingleTop = true
+                        popUpTo(route)
+                    }
                 }
             )
         }

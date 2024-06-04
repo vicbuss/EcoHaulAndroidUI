@@ -12,8 +12,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import br.com.alura.ecohaulconnect.navigation.bottomAppBarItems
 import br.com.alura.ecohaulconnect.ui.components.ServiceCard
 import br.com.alura.ecohaulconnect.sampledata.sampleServiceList
+import br.com.alura.ecohaulconnect.ui.components.EcoHaulScaffolding
+import br.com.alura.ecohaulconnect.ui.components.NavBarItem
 import br.com.alura.ecohaulconnect.ui.state.ServiceListUiState
 import br.com.alura.ecohaulconnect.ui.theme.White96
 
@@ -21,25 +24,34 @@ import br.com.alura.ecohaulconnect.ui.theme.White96
 fun ServiceListScreen(
     modifier: Modifier = Modifier,
     state: ServiceListUiState = ServiceListUiState(),
-    onNavigateToServiceDetails: (Long) -> Unit = {}
+    onNavigateToServiceDetails: (Long) -> Unit = {},
+    onBottomNavBarSelectedItemChange: (NavBarItem) -> Unit = {}
 ) {
-    val services = state.services
-    LazyColumn(
-        modifier
-            .fillMaxSize()
-            .background(White96)
-            .padding(horizontal = 24.dp),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.spacedBy(16.dp)
+    EcoHaulScaffolding(
+        showBottomBar = state.showBottomBar,
+        selectedBottomNavBarItem = state.selectedBottomNavBarItem,
+        topBarTitle = state.topBarTitle,
+        showNavigationIcon = state.showNavigationIcon,
+        onBottomNavBarSelectedItemChange = onBottomNavBarSelectedItemChange
     ) {
-        item {
-            Spacer(Modifier)
-        }
-        items(services) { service ->
-            ServiceCard(service = service, onNavigateToServiceDetails = onNavigateToServiceDetails)
-        }
-        item {
-            Spacer(Modifier)
+        val services = state.services
+        LazyColumn(
+            modifier
+                .fillMaxSize()
+                .background(White96)
+                .padding(horizontal = 24.dp),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.spacedBy(16.dp)
+        ) {
+            item {
+                Spacer(Modifier)
+            }
+            items(services) { service ->
+                ServiceCard(service = service, onNavigateToServiceDetails = onNavigateToServiceDetails)
+            }
+            item {
+                Spacer(Modifier)
+            }
         }
     }
 }
