@@ -13,21 +13,17 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import br.com.alura.ecohaulconnect.ui.components.ServiceCard
-import br.com.alura.ecohaulconnect.model.Service
 import br.com.alura.ecohaulconnect.sampledata.sampleServiceList
+import br.com.alura.ecohaulconnect.ui.state.ServiceListUiState
 import br.com.alura.ecohaulconnect.ui.theme.White96
 
-data class ServiceListUiState(
-    val services: List<Service> = emptyList(),
-    val onNavigateToServiceDetails: (Service) -> Unit = {}
-)
 @Composable
 fun ServiceListScreen(
     modifier: Modifier = Modifier,
-    state: ServiceListUiState = ServiceListUiState()
+    state: ServiceListUiState = ServiceListUiState(),
+    onNavigateToServiceDetails: (Long) -> Unit = {}
 ) {
     val services = state.services
-    val onNavigateToServiceDetails = state.onNavigateToServiceDetails
     LazyColumn(
         modifier
             .fillMaxSize()
@@ -39,7 +35,7 @@ fun ServiceListScreen(
         item {
             Spacer(Modifier)
         }
-        items(services) {service ->
+        items(services) { service ->
             ServiceCard(service = service, onNavigateToServiceDetails = onNavigateToServiceDetails)
         }
         item {
@@ -54,5 +50,5 @@ fun ServiceListScreenPreview() {
     val state = ServiceListUiState(
         services = sampleServiceList
     )
-   ServiceListScreen(state = state)
+    ServiceListScreen(state = state)
 }

@@ -32,7 +32,7 @@ import br.com.alura.ecohaulconnect.ui.theme.White96
 fun ServiceCard(
     service: Service,
     modifier: Modifier = Modifier,
-    onNavigateToServiceDetails: (service: Service) -> Unit = {},
+    onNavigateToServiceDetails: (Long) -> Unit = {},
 ) {
     Surface(
         shape = RoundedCornerShape(15.dp),
@@ -98,7 +98,7 @@ fun ServiceCard(
             Row(Modifier.padding(top = 32.dp, bottom = 16.dp, end = 16.dp, start = 16.dp)) {
                 Spacer(modifier = Modifier.weight(1f))
                 Button(
-                    onClick = {onNavigateToServiceDetails(service)},
+                    onClick = {onNavigateToServiceDetails(service.id)},
                     colors = ButtonDefaults.buttonColors(containerColor = Green40)
                 ) {
                     Text(text = "Detalhes")

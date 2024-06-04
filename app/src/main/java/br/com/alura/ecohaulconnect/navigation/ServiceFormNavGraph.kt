@@ -8,7 +8,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
 import br.com.alura.ecohaulconnect.ui.screens.ServiceFormScreen
 import br.com.alura.ecohaulconnect.ui.viewModels.ServiceFormScreenViewModel
-import br.com.alura.ecohaulconnect.ui.viewModels.ServiceFormScreenViewModelFactory
+import br.com.alura.ecohaulconnect.ui.viewModels.factory.EcoHaulViewModelFactory
 
 fun NavGraphBuilder.serviceFormGraph(
     navController: NavHostController
@@ -18,7 +18,7 @@ fun NavGraphBuilder.serviceFormGraph(
         arguments = ServiceForm.args
     ) { navBackStackEntry ->
         navBackStackEntry.arguments?.getLong(SERVICE_ID)?.let { id ->
-            val viewModel: ServiceFormScreenViewModel = viewModel(factory = ServiceFormScreenViewModelFactory(id))
+            val viewModel: ServiceFormScreenViewModel = viewModel(factory = EcoHaulViewModelFactory(id))
             val state by viewModel.uiState.collectAsState()
             ServiceFormScreen(
                 state = state,

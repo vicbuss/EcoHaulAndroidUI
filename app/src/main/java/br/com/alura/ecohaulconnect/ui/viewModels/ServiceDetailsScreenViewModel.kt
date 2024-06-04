@@ -1,0 +1,36 @@
+package br.com.alura.ecohaulconnect.ui.viewModels
+
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import br.com.alura.ecohaulconnect.data.ServiceDao
+import br.com.alura.ecohaulconnect.ui.screens.ServiceDetailsUiState
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.launch
+
+class ServiceDetailsScreenViewModel(private val serviceId: Long): ViewModel() {
+    private val dao = ServiceDao()
+    private val _uiState: MutableStateFlow<ServiceDetailsUiState> = MutableStateFlow(
+        ServiceDetailsUiState()
+    )
+
+    val uiState get() = _uiState
+
+    init {
+        viewModelScope.launch {
+            loadService()
+        }
+    }
+
+    private fun loadService() {
+        val service = dao.getServiceById(serviceId)
+        service?.let {
+            _uiState.value = _uiState.value.copy(
+                service = it
+            )
+        }
+    }
+
+    fun removeService(){
+        dao.removeService(serviceId)
+    }
+}

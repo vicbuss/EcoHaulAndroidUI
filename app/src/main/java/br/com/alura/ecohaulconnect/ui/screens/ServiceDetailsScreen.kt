@@ -12,24 +12,32 @@ import br.com.alura.ecohaulconnect.model.Service
 import br.com.alura.ecohaulconnect.sampledata.sampleService
 import br.com.alura.ecohaulconnect.ui.theme.White96
 
+data class ServiceDetailsUiState (
+    val service: Service? = null
+)
+
 @Composable
 fun ServiceDetailsScreen(
-    service: Service,
+    state: ServiceDetailsUiState,
     onCancelService: (service: Service) -> Unit = {},
     onEditService: (service: Service) -> Unit = {}
     ) {
-    Column(
-        Modifier
-            .fillMaxSize()
-            .background(White96)) {
-        Spacer(Modifier)
-        ServiceDetails(service, onEditService = onEditService, onCancelService = onCancelService)
-        Spacer(Modifier)
+    val service = state.service
+    service?.let {
+        Column(
+            Modifier
+                .fillMaxSize()
+                .background(White96)) {
+            Spacer(Modifier)
+            ServiceDetails(service, onEditService = onEditService, onCancelService = onCancelService)
+            Spacer(Modifier)
+        }
     }
+
 }
 
 @Preview
 @Composable
 fun ServiceDetailsScreenPreview() {
-   ServiceDetailsScreen(service = sampleService)
+   ServiceDetailsScreen(ServiceDetailsUiState(service = sampleService))
 }
