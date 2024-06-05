@@ -33,8 +33,12 @@ class ServiceDaoApi : IServiceDao {
         return userServiceList
     }
 
+    override fun getServiceById(id: Long): Service? {
+        TODO("Not yet implemented")
+    }
+
     override fun editService(service: Service): Service {
-        val call = ApiClient.apiService.editUserService(service.id, service)
+        val call = ApiClient.apiService.editUserService(service.id!!, service)
         var updatedService = service
 
         call.enqueue(object : Callback<Service> {

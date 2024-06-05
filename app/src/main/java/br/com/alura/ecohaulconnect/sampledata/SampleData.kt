@@ -18,6 +18,7 @@ val sampleAdress = Address(
 
 val sampleServiceList = listOf(
     Service(
+        id = 1L,
         description = "Um sofá de dois lugares para descartar",
         value = BigDecimal("250.00"),
         status = "ativo",
@@ -40,6 +41,7 @@ val sampleServiceList = listOf(
         ),
         category = "Móveis"
     ), Service(
+        id = 2L,
         description = "Um fogão para doar",
         value = BigDecimal("50"),
         status = "concluído",
@@ -61,6 +63,7 @@ val sampleServiceList = listOf(
         ),
         category = "Móveis"
     ), Service(
+        id = 3L,
         description = "Uma caixa de livros para doar",
         value = BigDecimal("50.00"),
         status = "concluído",
@@ -86,6 +89,7 @@ val sampleServiceList = listOf(
 )
 
 val sampleService = Service(
+        id = 1L,
         description = "Um sofá de dois lugares para descartar",
         value = BigDecimal("250.00"),
         status = "ativo",

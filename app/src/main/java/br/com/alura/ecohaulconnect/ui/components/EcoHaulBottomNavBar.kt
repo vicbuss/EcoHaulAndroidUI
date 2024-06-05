@@ -1,4 +1,4 @@
-package br.com.alura.ecohaulconnect.components
+package br.com.alura.ecohaulconnect.ui.components
 
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
@@ -9,6 +9,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.navigation.NavHostController
 import br.com.alura.ecohaulconnect.navigation.bottomAppBarItems
 import br.com.alura.ecohaulconnect.ui.theme.EcoHaulConnectTheme
 import br.com.alura.ecohaulconnect.ui.theme.Gray90
@@ -57,5 +58,13 @@ fun EcoHaulBottomNavBarPreview() {
             selectedItem = bottomAppBarItems.first(),
             items = bottomAppBarItems
         )
+    }
+}
+
+fun onBottomNavBarSelectedItemChange(item: NavBarItem, navHost: NavHostController) {
+    val route = item.route
+    navHost.navigate(route) {
+        launchSingleTop = true
+        popUpTo(route)
     }
 }
