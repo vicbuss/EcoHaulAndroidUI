@@ -1,12 +1,11 @@
 package br.com.alura.ecohaulconnect
 
+import android.util.Log
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.currentBackStackEntryAsState
 import br.com.alura.ecohaulconnect.navigation.AppDestinations
 import br.com.alura.ecohaulconnect.navigation.ServiceDetails
 import br.com.alura.ecohaulconnect.navigation.ServiceForm
@@ -16,6 +15,7 @@ import br.com.alura.ecohaulconnect.navigation.serviceDetailsGraph
 import br.com.alura.ecohaulconnect.navigation.serviceFormGraph
 import br.com.alura.ecohaulconnect.navigation.servicesGraph
 import br.com.alura.ecohaulconnect.navigation.signupGraph
+import br.com.alura.ecohaulconnect.navigation.splashGraph
 
 
 @Composable
@@ -26,9 +26,10 @@ fun EcoHaulNavHost(
     NavHost(
         navController = navController,
         // startDestination = AppDestinations.HomeGraph.route,
-        startDestination = AppDestinations.Login.route,
+        startDestination = AppDestinations.SplashScreen.route,
         modifier = modifier
     ) {
+        splashGraph(navController)
         loginGraph(navController)
         signupGraph(navController)
         servicesGraph(navController)

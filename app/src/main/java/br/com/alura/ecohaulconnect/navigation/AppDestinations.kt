@@ -14,7 +14,7 @@ sealed class AppDestinations(val route: String, val title: String) {
     object HomeGraph: AppDestinations("homeGraph", title = "EcoHaul")
     object Login: AppDestinations("login", title = "Login")
     object SignupForm: AppDestinations("signup", title = "Cadastrar")
-
+    object SplashScreen: AppDestinations("splash", title = "Carregando")
 }
 
 

@@ -6,6 +6,8 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
 
 class LoginScreenViewModel: ViewModel() {
+
+
     private val _uiState: MutableStateFlow<LoginScreenUiState> = MutableStateFlow(LoginScreenUiState())
     val uiState get() = _uiState
 
@@ -29,5 +31,12 @@ class LoginScreenViewModel: ViewModel() {
                 }
             )
         }
+    }
+
+    fun login() {
+        _uiState.value = _uiState.value.copy(
+            isLoggedIn = true
+        )
+
     }
 }
