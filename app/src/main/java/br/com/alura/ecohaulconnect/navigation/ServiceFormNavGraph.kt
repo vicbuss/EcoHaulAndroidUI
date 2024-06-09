@@ -6,6 +6,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
+import br.com.alura.ecohaulconnect.navigateToServiceDetails
 import br.com.alura.ecohaulconnect.ui.screens.ServiceFormScreen
 import br.com.alura.ecohaulconnect.ui.viewModels.ServiceFormScreenViewModel
 import br.com.alura.ecohaulconnect.ui.viewModels.factory.EcoHaulViewModelFactory
@@ -24,9 +25,9 @@ fun NavGraphBuilder.serviceFormGraph(
                 state = state,
                 onClickSave = {
                     viewModel.createOrEditService()
-                    navController.popBackStack()
+                    navController.navigateToServiceDetails(id)
                 },
-                onClickArrowBack = {navController.popBackStack()},
+                onClickArrowBack = {navController.navigateUp()},
                 onBottomNavBarSelectedItemChange = {
                     val route = it.route
                     navController.navigate(route) {

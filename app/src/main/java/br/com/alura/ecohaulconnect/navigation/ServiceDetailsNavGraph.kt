@@ -33,7 +33,7 @@ fun NavGraphBuilder.serviceDetailsGraph(
                         viewModel.removeService()
                         navController.popBackStack()
                     },
-                    onClickArrowBack = {navController.popBackStack()}
+                    onClickArrowBack = {navController.navigate(AppDestinations.Services.route)}
                 )
             } ?: LaunchedEffect(Unit) { navController.popBackStack() }
         }

@@ -10,10 +10,12 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import br.com.alura.ecohaulconnect.navigation.AppDestinations
 import br.com.alura.ecohaulconnect.navigation.ServiceDetails
 import br.com.alura.ecohaulconnect.navigation.ServiceForm
+import br.com.alura.ecohaulconnect.navigation.loginGraph
 import br.com.alura.ecohaulconnect.navigation.notificationsGraph
 import br.com.alura.ecohaulconnect.navigation.serviceDetailsGraph
 import br.com.alura.ecohaulconnect.navigation.serviceFormGraph
 import br.com.alura.ecohaulconnect.navigation.servicesGraph
+import br.com.alura.ecohaulconnect.navigation.signupGraph
 
 
 @Composable
@@ -23,9 +25,12 @@ fun EcoHaulNavHost(
 ) {
     NavHost(
         navController = navController,
-        startDestination = AppDestinations.HomeGraph.route,
+        // startDestination = AppDestinations.HomeGraph.route,
+        startDestination = AppDestinations.Login.route,
         modifier = modifier
     ) {
+        loginGraph(navController)
+        signupGraph(navController)
         servicesGraph(navController)
         serviceDetailsGraph(navController)
         serviceFormGraph(navController)
@@ -50,5 +55,5 @@ fun NavHostController.navigateToServiceDetails(serviceId: Long) {
 }
 
 fun NavHostController.navigateToServiceForm(serviceId: Long) {
-    navigateStraight("${ServiceForm.route}/$serviceId")
+    this.navigate("${ServiceForm.route}/$serviceId")
 }

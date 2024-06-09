@@ -1,7 +1,9 @@
 package br.com.alura.ecohaulconnect.ui.screens
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -133,7 +135,7 @@ fun ServiceFormScreen(
                                 imeAction = ImeAction.Next
                             )
                         )
-                        var openDialog = state.openDialog
+                        val openDialog = state.openDialog
                         val datePickerState =
                             rememberDatePickerState(initialDisplayMode = DisplayMode.Input)
                         if (openDialog) {
@@ -161,27 +163,36 @@ fun ServiceFormScreen(
                                 instant.atOffset(ZoneOffset.UTC).toLocalDate().toBrazilianDateFormat()
                             )
                         }
-                        TextField(
-                            value = state.date,
-                            onValueChange = state.onDateChange,
-                            colors = TextFieldDefaults.colors(
-                                unfocusedContainerColor = SurfaceContainerHighest,
-                                focusedContainerColor = SurfaceContainerHighest,
-                                focusedIndicatorColor = Green40,
-                                focusedLabelColor = Green40,
-                                cursorColor = Green40,
-                                disabledContainerColor = Color(0xFFE3E3DC)
-                            ),
-                            modifier = Modifier.fillMaxWidth(),
-                            label = { Text("Data") },
-                            enabled = false
-                        )
-                        Row {
-                            Spacer(Modifier.weight(1f))
-                            Button(onClick = { state.onOpenDialog(openDialog) }) {
-                                Text(text = "Escolher Data")
-                            }
+                        Box(modifier = Modifier.fillMaxWidth()) {
+                            TextField(
+                                value = state.date,
+                                onValueChange = state.onDateChange,
+                                colors = TextFieldDefaults.colors(
+                                    unfocusedContainerColor = SurfaceContainerHighest,
+                                    focusedContainerColor = SurfaceContainerHighest,
+                                    focusedIndicatorColor = Green40,
+                                    focusedLabelColor = Green40,
+                                    cursorColor = Green40,
+                                    disabledContainerColor = Color(0xFFE3E3DC)
+                                ),
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .clickable(enabled = false) { },
+                                label = { Text("Data") },
+                            )
+                            Box(modifier = Modifier
+                                .matchParentSize()
+                                .clickable { state.onOpenDialog(openDialog) }
+                                .background(Color.Transparent)
+                            )
                         }
+
+//                        Row {
+//                            Spacer(Modifier.weight(1f))
+//                            Button(onClick = { state.onOpenDialog(openDialog) }) {
+//                                Text(text = "Escolher Data")
+//                            }
+//                        }
 
                     }
                 }

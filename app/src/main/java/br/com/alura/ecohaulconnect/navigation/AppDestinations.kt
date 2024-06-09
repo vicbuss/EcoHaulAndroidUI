@@ -10,11 +10,10 @@ import br.com.alura.ecohaulconnect.ui.components.NavBarItem
 
 sealed class AppDestinations(val route: String, val title: String) {
     object Services: AppDestinations("services", "Meus serviços")
-    // object ServiceDetails: AppDestinations("serviceDetails", "Detalhes")
-    // object AddService: AppDestinations("addService", "Novo serviço")
-    // object EditService: AppDestinations("editService", "Editar serviço")
     object Notifications: AppDestinations("notifications", "Notificações")
     object HomeGraph: AppDestinations("homeGraph", title = "EcoHaul")
+    object Login: AppDestinations("login", title = "Login")
+    object SignupForm: AppDestinations("signup", title = "Cadastrar")
 
 }
 
