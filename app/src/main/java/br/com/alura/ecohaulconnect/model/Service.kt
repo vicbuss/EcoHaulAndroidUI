@@ -1,12 +1,9 @@
 package br.com.alura.ecohaulconnect.model
 
-import com.google.gson.annotations.SerializedName
 import java.math.BigDecimal
 import java.time.LocalDate
-import java.util.UUID
 
 data class Service(
-    // TODO: Integrar com identificador no formato da api
     val id: Long = 0L,
     val description: String,
     val status: String,

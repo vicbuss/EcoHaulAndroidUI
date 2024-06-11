@@ -1,19 +1,15 @@
 package br.com.alura.ecohaulconnect.navigation
 
-import android.util.Log
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.platform.LocalContext
-import androidx.datastore.dataStore
 import androidx.datastore.preferences.core.edit
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
 import br.com.alura.ecohaulconnect.navigateAndClear
-import br.com.alura.ecohaulconnect.navigateStraight
-import br.com.alura.ecohaulconnect.preferences.PreferencesKey.PWD
 import br.com.alura.ecohaulconnect.preferences.PreferencesKey.USER
 import br.com.alura.ecohaulconnect.preferences.datastore
 import br.com.alura.ecohaulconnect.ui.screens.SignupFormScreen
@@ -38,10 +34,10 @@ fun NavGraphBuilder.signupGraph(
             onSave = {
                 //pode ser movido para dentro do viewModel
                 coroutineScope.launch {
-                    dataStore.edit { preferences ->
-                        preferences[USER] = state.login
-                        preferences[PWD] = state.password
-                    }
+//                    dataStore.edit { preferences ->
+//                        preferences[USER] = state.login
+//                        preferences[PWD] = state.password
+//                    }
                 }
                 navController.navigateAndClear(AppDestinations.Login.route)
             }

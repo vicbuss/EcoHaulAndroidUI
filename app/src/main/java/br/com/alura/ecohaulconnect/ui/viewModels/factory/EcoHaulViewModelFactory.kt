@@ -24,10 +24,14 @@ class EcoHaulViewModelFactory(
         } else if (modelClass.isAssignableFrom(ServiceDetailsScreenViewModel::class.java)) {
             return ServiceDetailsScreenViewModel(serviceId) as T
         } else if (modelClass.isAssignableFrom(LoginScreenViewModel::class.java)) {
-            return LoginScreenViewModel() as T
+            if (application !== null) {
+                return LoginScreenViewModel(application) as T
+            } else {
+                throw IllegalArgumentException("Application must be provided for LoginScreenViewModel")
+            }
         } else if (modelClass.isAssignableFrom(SignupScreenViewModel::class.java)) {
             return SignupScreenViewModel() as T
-        } else if (modelClass.isAssignableFrom(SplashScreenViewModel:: class.java)) {
+        } else if (modelClass.isAssignableFrom(SplashScreenViewModel::class.java)) {
             if (application !== null) {
                 return SplashScreenViewModel(application) as T
             } else {

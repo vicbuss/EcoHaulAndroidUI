@@ -1,7 +1,5 @@
 package br.com.alura.ecohaulconnect.model
 
-import com.google.gson.annotations.SerializedName
-
 data class Address(
     val street: String,
     val neighborhood: String,
