@@ -9,10 +9,9 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
 import androidx.navigation.navigation
-import br.com.alura.ecohaulconnect.ui.components.onBottomNavBarSelectedItemChange
 import br.com.alura.ecohaulconnect.ui.screens.ServiceListScreen
-import br.com.alura.ecohaulconnect.ui.viewModels.factory.EcoHaulViewModelFactory
 import br.com.alura.ecohaulconnect.ui.viewModels.ServiceListScreenViewModel
+import br.com.alura.ecohaulconnect.ui.viewModels.factory.EcoHaulViewModelFactory
 
 fun NavGraphBuilder.servicesGraph(
     navController: NavHostController,

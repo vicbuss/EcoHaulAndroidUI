@@ -65,11 +65,11 @@ class LoginScreenViewModel(application: Application) : AndroidViewModel(applicat
     }
 
     private suspend fun tryLogin() {
-        repository.login(_uiState.value.user, _uiState.value.password)
+        repository.executeLogin(_uiState.value.user, _uiState.value.password)
     }
 
     private suspend fun tryGetUserId() {
         Log.i("LoginScreenViewModel", "tryGetUserId: called method")
-        repository.getId(_uiState.value.user)
+        repository.getClientId(_uiState.value.user)
     }
 }

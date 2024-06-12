@@ -18,7 +18,11 @@ class EcoHaulViewModelFactory(
     @Suppress("UNCHECKED_CAST")
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         if (modelClass.isAssignableFrom(ServiceFormScreenViewModel::class.java)) {
-            return ServiceFormScreenViewModel(serviceId) as T
+            if(application !== null) {
+                return ServiceFormScreenViewModel(serviceId, application) as T
+            } else {
+                throw IllegalArgumentException("Application must be provided for ServiceFormScreenViewModel")
+            }
         } else if (modelClass.isAssignableFrom(ServiceListScreenViewModel::class.java)) {
             if (application !== null) {
                 return ServiceListScreenViewModel(application) as T

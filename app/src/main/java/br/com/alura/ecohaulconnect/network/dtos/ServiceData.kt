@@ -17,6 +17,16 @@ data class ServiceData(
     val dataAgendamento: String,
     val descricao: String,
     val endereco: AddressData,
+    val itens: List<ItemData>,
+    val ativo: Boolean
+)
+
+data class NewServiceData(
+    val idCliente: Long,
+    val valor: BigDecimal,
+    val dataAgendamento: String,
+    val descricao: String,
+    val endereco: AddressData,
     val itens: List<ItemData>
 )
 
@@ -48,7 +58,7 @@ fun ServiceData.toService(): Service {
     return Service (
         id = id,
         description = descricao,
-        status = "ativo",
+        status = if (ativo) "ativo" else "cancelado",
         value = valor,
         date = dataAgendamento.fromUtcStringToLocalDate(),
         address = endereco.toAddress(),

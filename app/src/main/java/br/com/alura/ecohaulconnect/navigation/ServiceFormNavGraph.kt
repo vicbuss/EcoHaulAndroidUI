@@ -1,7 +1,10 @@
 package br.com.alura.ecohaulconnect.navigation
 
+import android.app.Application
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
@@ -19,13 +22,20 @@ fun NavGraphBuilder.serviceFormGraph(
         arguments = ServiceForm.args
     ) { navBackStackEntry ->
         navBackStackEntry.arguments?.getLong(SERVICE_ID)?.let { id ->
-            val viewModel: ServiceFormScreenViewModel = viewModel(factory = EcoHaulViewModelFactory(id))
+            val application = LocalContext.current.applicationContext as Application
+            val viewModel: ServiceFormScreenViewModel = viewModel(factory = EcoHaulViewModelFactory(serviceId = id, application = application))
             val state by viewModel.uiState.collectAsState()
+
+            LaunchedEffect(state.id) {
+                if (state.id != 0L) {
+                    navController.navigateToServiceDetails(state.id)
+                }
+            }
             ServiceFormScreen(
                 state = state,
                 onClickSave = {
                     viewModel.createOrEditService()
-                    navController.navigateToServiceDetails(id)
+                    // navController.navigateToServiceDetails(state.serviceId)
                 },
                 onClickArrowBack = {navController.navigateUp()},
                 onBottomNavBarSelectedItemChange = {

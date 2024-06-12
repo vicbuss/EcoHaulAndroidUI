@@ -2,9 +2,7 @@ package br.com.alura.ecohaulconnect.ui.viewModels
 
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import br.com.alura.ecohaulconnect.data.ServiceDao
 import br.com.alura.ecohaulconnect.model.Service
 import br.com.alura.ecohaulconnect.network.dtos.toService
 import br.com.alura.ecohaulconnect.preferences.datastore
@@ -31,7 +29,7 @@ class ServiceListScreenViewModel(application: Application) : AndroidViewModel(ap
     }
 
     private suspend fun listServices(): List<Service> {
-        val serviceResponse = repository.getServiceList()
+        val serviceResponse = repository.listServices()
         return serviceResponse.map { serviceData ->  serviceData.toService()}
     }
 }

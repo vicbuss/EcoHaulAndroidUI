@@ -7,6 +7,7 @@ import java.time.LocalDate
 
 
 data class ServiceFormUiState(
+    var id: Long = 0L,
     var value: String = "",
     var pickedDate: LocalDate = LocalDate.now(),
     var date: String = pickedDate.toBrazilianDateFormat(),
