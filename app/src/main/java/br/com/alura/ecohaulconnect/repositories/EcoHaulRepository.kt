@@ -5,6 +5,7 @@ import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.edit
 import br.com.alura.ecohaulconnect.network.dtos.LoginBody
+import br.com.alura.ecohaulconnect.network.dtos.ServiceData
 import br.com.alura.ecohaulconnect.network.dtos.UserIdBody
 import br.com.alura.ecohaulconnect.network.services.ApiClient
 import br.com.alura.ecohaulconnect.preferences.PreferencesKey.ID
@@ -54,7 +55,6 @@ class EcoHaulRepository private constructor(
     }
 
     suspend fun getId(email: String) {
-        Log.i("EcoHaulRepository", "getId: called method")
         val body = UserIdBody(email)
 
         val preferences = dataStore.data.firstOrNull()
@@ -71,13 +71,55 @@ class EcoHaulRepository private constructor(
             } else {
                 if (response.code() == 403) {
                     Log.e("EcoHaulRepository", "getId: Unauthorized")
-            //                   dataStore.edit {mutablePreferences ->
-            //                       mutablePreferences[LOGGEDIN] = false
-            //                       mutablePreferences[TOKEN] = ""
+                    //                   dataStore.edit {mutablePreferences ->
+                    //                       mutablePreferences[LOGGEDIN] = false
+                    //                       mutablePreferences[TOKEN] = ""
                 } else {
-                    Log.e("EcoHaulRepository", "getId: Error", )
+                    Log.e("EcoHaulRepository", "getId: ${response.errorBody()}")
                 }
             }
         }
+    }
+
+    suspend fun getServiceList(): List<ServiceData> {
+        val preferences = dataStore.data.firstOrNull()
+        val userId = preferences?.get(ID)
+        val token = preferences?.get(TOKEN)
+
+        var serviceDataList: List<ServiceData> = emptyList()
+
+        userId?.let { id ->
+            token?.let { jwt ->
+                val response = api.getUserServices(userId = id, token = "Bearer $jwt")
+                if (response.isSuccessful) {
+                    response.body()?.let { res ->
+                        serviceDataList = res.content
+                    }
+                } else {
+                    Log.e("EcoHaulRepository", "getServiceList: ${response.errorBody()}")
+                }
+            }
+        }
+        return serviceDataList
+    }
+
+    suspend fun detailService(serviceId: Long): ServiceData? {
+        val preferences = dataStore.data.firstOrNull()
+        val token = preferences?.get(TOKEN)
+
+        var service: ServiceData? = null
+
+        token?.let { jwt ->
+            val response = api.detailService(serviceId = serviceId, token = "Bearer $jwt")
+
+            if (response.isSuccessful) {
+                response.body()?.let {
+                    service = it
+                }
+            } else {
+                Log.e("EcoHaulRepository", "getServiceList: ${response.errorBody()}")
+            }
+        }
+        return service
     }
 }

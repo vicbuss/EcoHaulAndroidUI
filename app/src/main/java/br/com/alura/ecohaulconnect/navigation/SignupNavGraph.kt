@@ -4,13 +4,11 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.platform.LocalContext
-import androidx.datastore.preferences.core.edit
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
 import br.com.alura.ecohaulconnect.navigateAndClear
-import br.com.alura.ecohaulconnect.preferences.PreferencesKey.USER
 import br.com.alura.ecohaulconnect.preferences.datastore
 import br.com.alura.ecohaulconnect.ui.screens.SignupFormScreen
 import br.com.alura.ecohaulconnect.ui.viewModels.SignupScreenViewModel

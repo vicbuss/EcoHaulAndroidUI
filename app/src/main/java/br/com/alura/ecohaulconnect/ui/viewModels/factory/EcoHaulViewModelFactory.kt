@@ -20,9 +20,17 @@ class EcoHaulViewModelFactory(
         if (modelClass.isAssignableFrom(ServiceFormScreenViewModel::class.java)) {
             return ServiceFormScreenViewModel(serviceId) as T
         } else if (modelClass.isAssignableFrom(ServiceListScreenViewModel::class.java)) {
-            return ServiceListScreenViewModel() as T
+            if (application !== null) {
+                return ServiceListScreenViewModel(application) as T
+            } else {
+                throw IllegalArgumentException("Application must be provided for ServiceScreenViewModel")
+            }
         } else if (modelClass.isAssignableFrom(ServiceDetailsScreenViewModel::class.java)) {
-            return ServiceDetailsScreenViewModel(serviceId) as T
+            if (application !== null) {
+                return ServiceDetailsScreenViewModel(serviceId = serviceId, application = application) as T
+            } else {
+                throw IllegalArgumentException("Application must be provided for ServiceDetailsScreenViewModel")
+            }
         } else if (modelClass.isAssignableFrom(LoginScreenViewModel::class.java)) {
             if (application !== null) {
                 return LoginScreenViewModel(application) as T

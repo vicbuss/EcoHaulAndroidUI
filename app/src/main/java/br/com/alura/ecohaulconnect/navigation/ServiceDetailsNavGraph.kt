@@ -1,8 +1,10 @@
 package br.com.alura.ecohaulconnect.navigation
 
+import android.app.Application
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
@@ -20,22 +22,24 @@ fun NavGraphBuilder.serviceDetailsGraph(
         arguments = ServiceDetails.args
     ) { navBackstackEntry ->
         navBackstackEntry.arguments?.getLong(SERVICE_ID)?.let { id ->
-            val viewModel: ServiceDetailsScreenViewModel =
-                viewModel(factory = EcoHaulViewModelFactory(id))
+            val application = LocalContext.current.applicationContext as Application
+            val viewModel: ServiceDetailsScreenViewModel = viewModel(
+                factory = EcoHaulViewModelFactory(serviceId = id, application = application)
+            )
             val state by viewModel.uiState.collectAsState()
-            state.service?.let {
-                ServiceDetailsScreen(
-                    state = state,
-                    onEditService = {
-                        navController.navigateToServiceForm(it.id)
-                    },
-                    onCancelService = {
-                        viewModel.removeService()
-                        navController.popBackStack()
-                    },
-                    onClickArrowBack = {navController.navigate(AppDestinations.Services.route)}
-                )
-            } ?: LaunchedEffect(Unit) { navController.popBackStack() }
-        }
+
+            ServiceDetailsScreen(
+                state = state,
+                onEditService = {
+                    navController.navigateToServiceForm(it.id)
+                },
+                onCancelService = {
+                    viewModel.removeService()
+                    navController.popBackStack()
+                },
+                onClickArrowBack = { navController.navigate(AppDestinations.Services.route) }
+            )
+
+        } ?: LaunchedEffect(Unit) { navController.popBackStack() }
     }
 }

@@ -1,7 +1,9 @@
 package br.com.alura.ecohaulconnect.navigation
 
+import android.app.Application
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
@@ -20,8 +22,9 @@ fun NavGraphBuilder.servicesGraph(
         route = AppDestinations.HomeGraph.route
     ) {
         composable(AppDestinations.Services.route) {
+            val application = LocalContext.current.applicationContext as Application
             val viewModel: ServiceListScreenViewModel =
-                viewModel(factory = EcoHaulViewModelFactory())
+                viewModel(factory = EcoHaulViewModelFactory(application = application))
             val state by viewModel.uiState.collectAsState()
 
             ServiceListScreen(
