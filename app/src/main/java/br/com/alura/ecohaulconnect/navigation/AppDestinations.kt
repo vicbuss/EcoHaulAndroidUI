@@ -10,12 +10,11 @@ import br.com.alura.ecohaulconnect.ui.components.NavBarItem
 
 sealed class AppDestinations(val route: String, val title: String) {
     object Services: AppDestinations("services", "Meus serviços")
-    // object ServiceDetails: AppDestinations("serviceDetails", "Detalhes")
-    // object AddService: AppDestinations("addService", "Novo serviço")
-    // object EditService: AppDestinations("editService", "Editar serviço")
     object Notifications: AppDestinations("notifications", "Notificações")
     object HomeGraph: AppDestinations("homeGraph", title = "EcoHaul")
-
+    object Login: AppDestinations("login", title = "Login")
+    object SignupForm: AppDestinations("signup", title = "Cadastrar")
+    object SplashScreen: AppDestinations("splash", title = "Carregando")
 }
 
 
@@ -52,9 +51,9 @@ val bottomAppBarItems = listOf<NavBarItem>(
         icon = Icons.Filled.AddCircle,
         route = "${ServiceForm.route}/${0L}"
     ),
-    NavBarItem(
-        label = AppDestinations.Notifications.title,
-        icon = Icons.Filled.Notifications,
-        route = AppDestinations.Notifications.route
-    )
+//    NavBarItem(
+//        label = AppDestinations.Notifications.title,
+//        icon = Icons.Filled.Notifications,
+//        route = AppDestinations.Notifications.route
+//    )
 )

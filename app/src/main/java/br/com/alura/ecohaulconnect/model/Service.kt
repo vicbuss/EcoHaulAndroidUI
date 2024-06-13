@@ -1,12 +1,12 @@
 package br.com.alura.ecohaulconnect.model
 
-import com.google.gson.annotations.SerializedName
+import br.com.alura.ecohaulconnect.extensions.toIsoLocalDateTime
+import br.com.alura.ecohaulconnect.network.dtos.NewServiceData
+import br.com.alura.ecohaulconnect.network.dtos.ServiceData
 import java.math.BigDecimal
 import java.time.LocalDate
-import java.util.UUID
 
 data class Service(
-    // TODO: Integrar com identificador no formato da api
     val id: Long = 0L,
     val description: String,
     val status: String,
@@ -16,3 +16,27 @@ data class Service(
     val items: List<Item>,
     val category: String
 )
+
+fun Service.toNewServiceData(clientId: Long): NewServiceData {
+    return NewServiceData(
+        descricao = description,
+        endereco = address.toAdressData(),
+        valor = value,
+        idCliente = clientId,
+        dataAgendamento = date.toIsoLocalDateTime(),
+        itens = items.map { item -> item.toItemData(category.uppercase()) }
+    )
+}
+
+fun Service.toServiceData(clientId: Long): ServiceData {
+    return ServiceData(
+        id = id,
+        descricao = description,
+        endereco = address.toAdressData(),
+        valor = value,
+        idCliente = clientId,
+        dataAgendamento = date.toIsoLocalDateTime(),
+        itens = items.map { item -> item.toItemData(category.uppercase()) },
+        ativo = status == "ativo"
+    )
+}

@@ -1,6 +1,6 @@
 package br.com.alura.ecohaulconnect.model
 
-import com.google.gson.annotations.SerializedName
+import br.com.alura.ecohaulconnect.network.dtos.AddressData
 
 data class Address(
     val street: String,
@@ -11,3 +11,15 @@ data class Address(
     val number: String,
     val complement: String
 )
+
+fun Address.toAdressData(): AddressData {
+    return AddressData(
+        logradouro = street,
+        bairro = neighborhood,
+        cep = zipCode,
+        cidade = city,
+        uf = state,
+        numero = number,
+        complemento = complement
+    )
+}

@@ -1,30 +1,43 @@
 package br.com.alura.ecohaulconnect.ui.viewModels
 
+import android.app.Application
 import android.util.Log
-import androidx.lifecycle.ViewModel
-import br.com.alura.ecohaulconnect.data.ServiceDao
+import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.viewModelScope
 import br.com.alura.ecohaulconnect.extensions.toBrazilianCurrency
 import br.com.alura.ecohaulconnect.extensions.toBrazilianDateFormat
 import br.com.alura.ecohaulconnect.model.Address
 import br.com.alura.ecohaulconnect.model.Item
 import br.com.alura.ecohaulconnect.model.Service
+import br.com.alura.ecohaulconnect.network.dtos.ServiceData
+import br.com.alura.ecohaulconnect.network.dtos.toService
+import br.com.alura.ecohaulconnect.preferences.datastore
+import br.com.alura.ecohaulconnect.repositories.EcoHaulRepository
 import br.com.alura.ecohaulconnect.ui.state.ServiceFormUiState
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 import java.math.BigDecimal
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
+import kotlin.math.log
 
-class ServiceFormScreenViewModel(private val serviceId: Long) : ViewModel() {
-    private val dao = ServiceDao()
+class ServiceFormScreenViewModel(private val serviceId: Long, application: Application) :
+    AndroidViewModel(application) {
     private var persistenceStrategy = PersistenceStrategy.INSERT
     private val _uiState: MutableStateFlow<ServiceFormUiState> =
         MutableStateFlow(ServiceFormUiState())
+    private val dataStore = getApplication<Application>().applicationContext.datastore
+    private val repository = EcoHaulRepository.getInstance(dataStore)
 
     val uiState get() = _uiState
 
     init {
-        loadService(serviceId)
+        viewModelScope.launch {
+            loadService(serviceId)
+        }
+
+        Log.i("ServiceFormScreenViewModel", "init: serviceId: $serviceId")
         _uiState.update { state ->
             state.copy(
                 onValueChange = {
@@ -148,11 +161,12 @@ class ServiceFormScreenViewModel(private val serviceId: Long) : ViewModel() {
         }
     }
 
-    private fun loadService(id: Long) {
-        val service = dao.getServiceById(id)
-        service?.let {
+    private suspend fun loadService(id: Long) {
+        val serviceData = repository.detailService(id)
+        serviceData?.let {
+            val service = serviceData.toService()
             this.persistenceStrategy = PersistenceStrategy.UPDATE
-            with(it) {
+            with(service) {
                 _uiState.value = _uiState.value.copy(
                     topBarTitle = "Editar serviço",
                     value = value.toBrazilianCurrency(),
@@ -214,7 +228,6 @@ class ServiceFormScreenViewModel(private val serviceId: Long) : ViewModel() {
                 )
             )
             val formattedValue = value.replace("R$", "").replace(",", ".").trim()
-            Log.i("ServiceFormViewModel", "createOrEditService: $formattedValue")
             val service = Service(
                 id = serviceId,
                 category = itemCategory,
@@ -227,12 +240,39 @@ class ServiceFormScreenViewModel(private val serviceId: Long) : ViewModel() {
                 items = itemList
             )
 
-            if (persistenceStrategy == PersistenceStrategy.INSERT) {
-                dao.addService(service)
-            } else {
-                dao.editService(service)
+            Log.i("ServiceFormScreenViewModel", "createOrEditService: serviceId = ${service.id}")
+
+            viewModelScope.launch {
+                if (persistenceStrategy == PersistenceStrategy.INSERT) {
+                    Log.i("ServiceFormScreenViewModel", "createOrEditService: inserting service = $service")
+                    val addedServiceData = addService(service)
+                    addedServiceData?.let {
+                        val addedService = it.toService()
+                        _uiState.value = _uiState.value.copy(
+                            id = addedService.id
+                        )
+                    }
+                } else {
+                    val editedServiceData = editService(service)
+                    editedServiceData?.let {
+                        val editedService = it.toService()
+                        _uiState.value = _uiState.value.copy(
+                            id = editedService.id
+                        )
+                    }
+                }
             }
         }
+    }
+
+    private suspend fun addService(service: Service): ServiceData? {
+        Log.i("ServiceFormScreenViewModel", "addService: call repository")
+        return repository.addNewService(service)
+    }
+
+    private suspend fun editService(service: Service): ServiceData? {
+        Log.i("ServiceFormScreenViewModel", "editService: serviceId = ${service.id}")
+        return repository.editService(service)
     }
 
     private fun parseStringToDate(dateString: String): LocalDate {

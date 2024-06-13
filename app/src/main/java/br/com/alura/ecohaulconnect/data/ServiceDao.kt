@@ -2,6 +2,7 @@ package br.com.alura.ecohaulconnect.data
 
 import br.com.alura.ecohaulconnect.model.Service
 import br.com.alura.ecohaulconnect.sampledata.sampleService
+import br.com.alura.ecohaulconnect.sampledata.sampleServiceList
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
@@ -9,7 +10,7 @@ import kotlin.random.Random
 
 class ServiceDao {
     companion object {
-        private val serviceList = MutableStateFlow<List<Service>>(listOf(sampleService))
+        private val serviceList = MutableStateFlow<List<Service>>(sampleServiceList)
     }
     fun listServices() = serviceList.asStateFlow()
 

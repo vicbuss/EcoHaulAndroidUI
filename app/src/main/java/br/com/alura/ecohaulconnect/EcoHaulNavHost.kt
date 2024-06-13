@@ -1,19 +1,24 @@
 package br.com.alura.ecohaulconnect
 
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.datastore.core.DataStore
+import androidx.datastore.preferences.core.Preferences
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.currentBackStackEntryAsState
 import br.com.alura.ecohaulconnect.navigation.AppDestinations
 import br.com.alura.ecohaulconnect.navigation.ServiceDetails
 import br.com.alura.ecohaulconnect.navigation.ServiceForm
+import br.com.alura.ecohaulconnect.navigation.loginGraph
 import br.com.alura.ecohaulconnect.navigation.notificationsGraph
 import br.com.alura.ecohaulconnect.navigation.serviceDetailsGraph
 import br.com.alura.ecohaulconnect.navigation.serviceFormGraph
 import br.com.alura.ecohaulconnect.navigation.servicesGraph
+import br.com.alura.ecohaulconnect.navigation.signupGraph
+import br.com.alura.ecohaulconnect.navigation.splashGraph
+import br.com.alura.ecohaulconnect.preferences.PreferencesKey.LOGGEDIN
+import kotlinx.coroutines.flow.firstOrNull
 
 
 @Composable
@@ -23,9 +28,13 @@ fun EcoHaulNavHost(
 ) {
     NavHost(
         navController = navController,
-        startDestination = AppDestinations.HomeGraph.route,
+        // startDestination = AppDestinations.HomeGraph.route,
+        startDestination = AppDestinations.SplashScreen.route,
         modifier = modifier
     ) {
+        splashGraph(navController)
+        loginGraph(navController)
+        signupGraph(navController)
         servicesGraph(navController)
         serviceDetailsGraph(navController)
         serviceFormGraph(navController)
@@ -33,6 +42,18 @@ fun EcoHaulNavHost(
     }
 }
 
+
+suspend fun NavHostController.navigateIfAuthorized(route: String, dataStore: DataStore<Preferences>) {
+    var routeToNavigate = route
+
+    val preferences = dataStore.data.firstOrNull()
+    val isLoggedIn = preferences?.get(LOGGEDIN)
+
+    if (isLoggedIn != true) {
+        routeToNavigate = AppDestinations.Login.route
+    }
+    this.navigate(routeToNavigate)
+}
 fun NavHostController.navigateStraight(route: String) = this.navigate(route) {
     popUpTo(this@navigateStraight.graph.findStartDestination().id) {
         saveState = true
@@ -50,5 +71,5 @@ fun NavHostController.navigateToServiceDetails(serviceId: Long) {
 }
 
 fun NavHostController.navigateToServiceForm(serviceId: Long) {
-    navigateStraight("${ServiceForm.route}/$serviceId")
+    this.navigate("${ServiceForm.route}/$serviceId")
 }
