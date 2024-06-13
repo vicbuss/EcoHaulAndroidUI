@@ -40,7 +40,6 @@ class EcoHaulRepository private constructor(
         }
     }
     suspend fun signup(loginData: LoginBody, userData: UserData) {
-        val preferences = dataStore.data.firstOrNull()
 
         try {
             val userSignup = api.signupUserData(loginData)
@@ -59,17 +58,23 @@ class EcoHaulRepository private constructor(
             login = user,
             senha = password
         )
+        val userBody = UserIdBody(user)
 
         try {
-            val response = api.getLoginToken(loginBody)
-
-            if (response.isSuccessful) {
-                response.body()?.let {
-                    val token = it.token
-                    dataStore.edit { preferences ->
-                        preferences[TOKEN] = token
-                        preferences[LOGGEDIN] = true
-
+            val tokenResponse = api.getLoginToken(loginBody)
+            if (tokenResponse.isSuccessful) {
+                tokenResponse.body()?.let {loginResponse ->
+                    val token = loginResponse.token
+                    val idResponse = api.getUserId(userBody, "Bearer $token")
+                    if (idResponse.isSuccessful) {
+                        idResponse.body()?.let {idResponse ->
+                            val id = idResponse.id
+                            dataStore.edit {preferences ->
+                                preferences[TOKEN] = token
+                                preferences[ID] = id
+                                preferences[LOGGEDIN] = true
+                            }
+                        }
                     }
                 }
             }
@@ -79,37 +84,37 @@ class EcoHaulRepository private constructor(
 
     }
 
-    suspend fun getClientId(email: String) {
-        val body = UserIdBody(email)
-
-        val preferences = dataStore.data.firstOrNull()
-        val token = preferences?.get(TOKEN)
-
-        try {
-            token?.let { jwt ->
-                val response = api.getUserId(body = body, token = "Bearer $jwt")
-                if (response.isSuccessful) {
-                    response.body()?.let { idResponse ->
-                        dataStore.edit { mutablePreferences ->
-                            mutablePreferences[ID] = idResponse.id
-                        }
-                    }
-                } else {
-                    if (response.code() == 403) {
-                        Log.e("EcoHaulRepository", "getId: Unauthorized")
-                        dataStore.edit { preferences ->
-                            preferences[LOGGEDIN] = false
-                        }
-                    } else {
-                        Log.e("EcoHaulRepository", "getId: ${response.errorBody()}")
-                    }
-                }
-            }
-        } catch (e: ConnectException) {
-            Log.e("EcoHaulRepository", "getId: Connection error when connecting to api")
-        }
-
-    }
+//    suspend fun getClientId(email: String) {
+//        val body = UserIdBody(email)
+//
+//        val preferences = dataStore.data.firstOrNull()
+//        val token = preferences?.get(TOKEN)
+//
+//        try {
+//            token?.let { jwt ->
+//                val response = api.getUserId(body = body, token = "Bearer $jwt")
+//                if (response.isSuccessful) {
+//                    response.body()?.let { idResponse ->
+//                        dataStore.edit { mutablePreferences ->
+//                            mutablePreferences[ID] = idResponse.id
+//                        }
+//                    }
+//                } else {
+//                    if (response.code() == 403) {
+//                        Log.e("EcoHaulRepository", "getId: Unauthorized")
+//                        dataStore.edit { preferences ->
+//                            preferences[LOGGEDIN] = false
+//                        }
+//                    } else {
+//                        Log.e("EcoHaulRepository", "getId: ${response.errorBody()}")
+//                    }
+//                }
+//            }
+//        } catch (e: ConnectException) {
+//            Log.e("EcoHaulRepository", "getId: Connection error when connecting to api")
+//        }
+//
+//    }
 
     suspend fun listServices(): List<ServiceData> {
         val preferences = dataStore.data.firstOrNull()

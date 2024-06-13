@@ -45,7 +45,6 @@ class LoginScreenViewModel(application: Application) : AndroidViewModel(applicat
     fun login() {
         viewModelScope.launch {
             tryLogin()
-            tryGetUserId()
             datastore.data.collect {
                 val isLoggedIn = it[LOGGEDIN]
                 val id = it[ID]
@@ -68,8 +67,8 @@ class LoginScreenViewModel(application: Application) : AndroidViewModel(applicat
         repository.executeLogin(_uiState.value.user, _uiState.value.password)
     }
 
-    private suspend fun tryGetUserId() {
-        Log.i("LoginScreenViewModel", "tryGetUserId: called method")
-        repository.getClientId(_uiState.value.user)
-    }
+//    private suspend fun tryGetUserId() {
+//        Log.i("LoginScreenViewModel", "tryGetUserId: called method")
+//        repository.getClientId(_uiState.value.user)
+//    }
 }

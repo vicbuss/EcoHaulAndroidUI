@@ -7,8 +7,8 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 
 object RetrofitClient {
-    //private const val BASE_URL = "https://ecohaul-clientes-servicos-api.onrender.com/"
-    private const val BASE_URL = "http://192.168.15.54:8080"
+    private const val BASE_URL = "https://ecohaul-clientes-servicos-api.onrender.com/"
+    // private const val BASE_URL = "http://000.000.00.00:8080"
 
     private val client = OkHttpClient.Builder()
         .addInterceptor(HttpLoggingInterceptor().apply {

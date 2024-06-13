@@ -1,8 +1,9 @@
 package br.com.alura.ecohaulconnect
 
-import android.util.Log
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.datastore.core.DataStore
+import androidx.datastore.preferences.core.Preferences
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
@@ -16,6 +17,8 @@ import br.com.alura.ecohaulconnect.navigation.serviceFormGraph
 import br.com.alura.ecohaulconnect.navigation.servicesGraph
 import br.com.alura.ecohaulconnect.navigation.signupGraph
 import br.com.alura.ecohaulconnect.navigation.splashGraph
+import br.com.alura.ecohaulconnect.preferences.PreferencesKey.LOGGEDIN
+import kotlinx.coroutines.flow.firstOrNull
 
 
 @Composable
@@ -39,6 +42,18 @@ fun EcoHaulNavHost(
     }
 }
 
+
+suspend fun NavHostController.navigateIfAuthorized(route: String, dataStore: DataStore<Preferences>) {
+    var routeToNavigate = route
+
+    val preferences = dataStore.data.firstOrNull()
+    val isLoggedIn = preferences?.get(LOGGEDIN)
+
+    if (isLoggedIn != true) {
+        routeToNavigate = AppDestinations.Login.route
+    }
+    this.navigate(routeToNavigate)
+}
 fun NavHostController.navigateStraight(route: String) = this.navigate(route) {
     popUpTo(this@navigateStraight.graph.findStartDestination().id) {
         saveState = true
