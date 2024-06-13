@@ -5,6 +5,7 @@ import br.com.alura.ecohaulconnect.network.dtos.LoginResponse
 import br.com.alura.ecohaulconnect.network.dtos.NewServiceData
 import br.com.alura.ecohaulconnect.network.dtos.ServiceData
 import br.com.alura.ecohaulconnect.network.dtos.ServiceListResponse
+import br.com.alura.ecohaulconnect.network.dtos.UserData
 import br.com.alura.ecohaulconnect.network.dtos.UserIdBody
 import br.com.alura.ecohaulconnect.network.dtos.UserIdResponse
 import retrofit2.Response
@@ -57,5 +58,15 @@ interface ApiService {
     suspend fun cancelService(
         @Path("idServico") serviceId: Long,
         @Header("Authorization") token: String
+    ): Response<Unit>
+
+    @POST("clientes")
+    suspend fun signupClientData(
+        @Body body: UserData
+    ): Response<UserData>
+
+    @POST("auth/signup")
+    suspend fun signupUserData(
+        @Body body: LoginBody
     ): Response<Unit>
 }

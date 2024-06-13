@@ -1,5 +1,6 @@
 package br.com.alura.ecohaulconnect.navigation
 
+import android.app.Application
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
@@ -21,22 +22,14 @@ fun NavGraphBuilder.signupGraph(
     composable(
         route = AppDestinations.SignupForm.route
     ) {
-        val viewModel: SignupScreenViewModel = viewModel(factory = EcoHaulViewModelFactory())
+        val application = LocalContext.current.applicationContext as Application
+        val viewModel: SignupScreenViewModel = viewModel(factory = EcoHaulViewModelFactory(application = application))
         val state by viewModel.uiState.collectAsState()
-
-        val dataStore = LocalContext.current.datastore
-        val coroutineScope = rememberCoroutineScope()
 
         SignupFormScreen(
             state = state,
             onSave = {
-                //pode ser movido para dentro do viewModel
-                coroutineScope.launch {
-//                    dataStore.edit { preferences ->
-//                        preferences[USER] = state.login
-//                        preferences[PWD] = state.password
-//                    }
-                }
+                viewModel.signup()
                 navController.navigateAndClear(AppDestinations.Login.route)
             }
         )

@@ -42,7 +42,11 @@ class EcoHaulViewModelFactory(
                 throw IllegalArgumentException("Application must be provided for LoginScreenViewModel")
             }
         } else if (modelClass.isAssignableFrom(SignupScreenViewModel::class.java)) {
-            return SignupScreenViewModel() as T
+            if (application !== null) {
+                return SignupScreenViewModel(application) as T
+            } else {
+                throw IllegalArgumentException("Application must be provided for SignupScreenViewModel")
+            }
         } else if (modelClass.isAssignableFrom(SplashScreenViewModel::class.java)) {
             if (application !== null) {
                 return SplashScreenViewModel(application) as T

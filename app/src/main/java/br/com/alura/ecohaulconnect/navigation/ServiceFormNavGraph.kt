@@ -1,6 +1,7 @@
 package br.com.alura.ecohaulconnect.navigation
 
 import android.app.Application
+import android.util.Log
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -27,6 +28,7 @@ fun NavGraphBuilder.serviceFormGraph(
             val state by viewModel.uiState.collectAsState()
 
             LaunchedEffect(state.id) {
+                Log.i("ServiceFormNavGraph", "serviceFormGraph: try to navigate = ${state.id}")
                 if (state.id != 0L) {
                     navController.navigateToServiceDetails(state.id)
                 }

@@ -9,3 +9,8 @@ fun String.fromUtcStringToLocalDate(): LocalDate {
     val localDateTime = LocalDateTime.parse(this, formatter)
     return localDateTime.toLocalDate()
 }
+
+fun String.fromBrazilianDateToLocalDate(): LocalDate {
+    val formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy")
+    return LocalDate.parse(this, formatter)
+}

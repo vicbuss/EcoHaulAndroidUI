@@ -13,3 +13,8 @@ fun LocalDate.toIsoLocalDateTime(): String {
     val localDateTime = this.atTime(LocalTime.MIDNIGHT)
     return localDateTime.format(DateTimeFormatter.ISO_LOCAL_DATE_TIME)
 }
+
+fun LocalDate.toUTCDate(): String {
+    val formatter = DateTimeFormatter.ofPattern(("yyyy-MM-dd"))
+    return this.format(formatter)
+}

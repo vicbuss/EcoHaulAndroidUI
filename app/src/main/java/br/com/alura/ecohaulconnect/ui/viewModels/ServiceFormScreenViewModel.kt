@@ -244,6 +244,7 @@ class ServiceFormScreenViewModel(private val serviceId: Long, application: Appli
 
             viewModelScope.launch {
                 if (persistenceStrategy == PersistenceStrategy.INSERT) {
+                    Log.i("ServiceFormScreenViewModel", "createOrEditService: inserting service = $service")
                     val addedServiceData = addService(service)
                     addedServiceData?.let {
                         val addedService = it.toService()
@@ -265,6 +266,7 @@ class ServiceFormScreenViewModel(private val serviceId: Long, application: Appli
     }
 
     private suspend fun addService(service: Service): ServiceData? {
+        Log.i("ServiceFormScreenViewModel", "addService: call repository")
         return repository.addNewService(service)
     }
 

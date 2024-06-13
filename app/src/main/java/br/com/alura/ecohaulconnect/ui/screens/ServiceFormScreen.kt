@@ -186,14 +186,6 @@ fun ServiceFormScreen(
                                 .background(Color.Transparent)
                             )
                         }
-
-//                        Row {
-//                            Spacer(Modifier.weight(1f))
-//                            Button(onClick = { state.onOpenDialog(openDialog) }) {
-//                                Text(text = "Escolher Data")
-//                            }
-//                        }
-
                     }
                 }
                 Row(horizontalArrangement = Arrangement.spacedBy(16.dp)) {

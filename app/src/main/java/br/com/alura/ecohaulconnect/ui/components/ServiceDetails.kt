@@ -202,7 +202,7 @@ fun ServiceDetails(
                             Modifier
                                 .size(200.dp),
                             contentScale = ContentScale.Crop,
-                            placeholder = painterResource(id = R.drawable.ic_launcher_background)
+                            placeholder = painterResource(id = R.drawable.placeholder_image)
                         )
                     }
                 }

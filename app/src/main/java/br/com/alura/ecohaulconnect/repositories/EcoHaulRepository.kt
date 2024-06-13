@@ -9,6 +9,7 @@ import br.com.alura.ecohaulconnect.model.toNewServiceData
 import br.com.alura.ecohaulconnect.model.toServiceData
 import br.com.alura.ecohaulconnect.network.dtos.LoginBody
 import br.com.alura.ecohaulconnect.network.dtos.ServiceData
+import br.com.alura.ecohaulconnect.network.dtos.UserData
 import br.com.alura.ecohaulconnect.network.dtos.UserIdBody
 import br.com.alura.ecohaulconnect.network.services.ApiClient
 import br.com.alura.ecohaulconnect.preferences.PreferencesKey.ID
@@ -38,7 +39,21 @@ class EcoHaulRepository private constructor(
             return instance!!
         }
     }
+    suspend fun signup(loginData: LoginBody, userData: UserData) {
+        val preferences = dataStore.data.firstOrNull()
 
+        try {
+            val userSignup = api.signupUserData(loginData)
+            if (userSignup.isSuccessful) {
+                val clientSignup = api.signupClientData(userData)
+                if(clientSignup.isSuccessful) {
+                    Log.i("EcoHaulRepository", "signup: Successfully signed up user")
+                }
+            }
+        } catch (e: ConnectException) {
+            Log.e("EcoHaulRepository", "login: Connection error when connecting to api")
+        }
+    }
     suspend fun executeLogin(user: String, password: String) {
         val loginBody = LoginBody(
             login = user,
@@ -164,6 +179,8 @@ class EcoHaulRepository private constructor(
         val preferences = dataStore.data.firstOrNull()
         val token = preferences?.get(TOKEN)
         val userId = preferences?.get(ID)
+        Log.i("EcoHaulRepository", "addNewService: token = $token")
+        Log.i("EcoHaulRepository", "addNewService: id = $userId")
 
         var addedService: ServiceData? = null
 
@@ -247,4 +264,6 @@ class EcoHaulRepository private constructor(
             Log.e("EcoHaulRepository", "addNewService: Connection error when connecting to api")
         }
     }
+
+
 }
