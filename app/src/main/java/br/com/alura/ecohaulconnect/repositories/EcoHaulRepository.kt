@@ -15,6 +15,7 @@ import br.com.alura.ecohaulconnect.preferences.PreferencesKey.ID
 import br.com.alura.ecohaulconnect.preferences.PreferencesKey.LOGGEDIN
 import br.com.alura.ecohaulconnect.preferences.PreferencesKey.TOKEN
 import kotlinx.coroutines.flow.firstOrNull
+import retrofit2.Response
 import java.net.ConnectException
 
 class EcoHaulRepository private constructor(
@@ -224,5 +225,26 @@ class EcoHaulRepository private constructor(
             Log.e("EcoHaulRepository", "addNewService: Connection error when connecting to api")
         }
         return editedService
+    }
+
+    suspend fun removeService(serviceId: Long)  {
+        val preferences = dataStore.data.firstOrNull()
+        val token = preferences?.get(TOKEN)
+
+        try {
+            token?.let { jwt ->
+                val response = api.cancelService(serviceId, token)
+                if (!response.isSuccessful)  {
+                    Log.e("EcoHaulRepository", "cancelService: ${response.errorBody()}")
+                    if (response.code() == 403) {
+                        dataStore.edit { preferences ->
+                            preferences[LOGGEDIN] = false
+                        }
+                    }
+                }
+            }
+        } catch (e: ConnectException) {
+            Log.e("EcoHaulRepository", "addNewService: Connection error when connecting to api")
+        }
     }
 }

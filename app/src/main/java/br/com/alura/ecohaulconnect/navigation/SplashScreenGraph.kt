@@ -41,7 +41,7 @@ fun NavGraphBuilder.splashGraph(
             }
             AppState.LoggedIn -> {
                 LaunchedEffect(Unit) {
-                    navController.navigateStraight(AppDestinations.HomeGraph.route)
+                    navController.navigate(AppDestinations.Services.route)
                 }
             }
         }

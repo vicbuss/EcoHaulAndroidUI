@@ -11,6 +11,7 @@ import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.Header
+import retrofit2.http.PATCH
 import retrofit2.http.POST
 import retrofit2.http.PUT
 import retrofit2.http.Path
@@ -51,4 +52,10 @@ interface ApiService {
         @Path("idServico") serviceId: Long,
         @Header("Authorization") token: String
     ): Response<ServiceData>
+
+    @PATCH("servicos/remover/{idServico}")
+    suspend fun cancelService(
+        @Path("idServico") serviceId: Long,
+        @Header("Authorization") token: String
+    ): Response<Unit>
 }

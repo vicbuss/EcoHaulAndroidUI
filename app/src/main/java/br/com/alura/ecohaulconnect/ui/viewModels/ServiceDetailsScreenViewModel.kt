@@ -37,6 +37,8 @@ class ServiceDetailsScreenViewModel(private val serviceId: Long, application: Ap
     }
 
     fun removeService(){
-        // dao.removeService(serviceId)
+        viewModelScope.launch {
+            repository.removeService(serviceId)
+        }
     }
 }

@@ -35,7 +35,7 @@ fun NavGraphBuilder.serviceDetailsGraph(
                 },
                 onCancelService = {
                     viewModel.removeService()
-                    navController.popBackStack()
+                    navController.navigate(AppDestinations.Services.route)
                 },
                 onClickArrowBack = { navController.navigate(AppDestinations.Services.route) }
             )

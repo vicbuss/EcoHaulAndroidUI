@@ -27,7 +27,7 @@ fun NavGraphBuilder.loginGraph(
 
         if (state.isLoggedIn) {
             LaunchedEffect(Unit) {
-                navController.navigateStraight(AppDestinations.SplashScreen.route)
+                navController.navigate(AppDestinations.SplashScreen.route)
             }
         }
         LoginScreen(

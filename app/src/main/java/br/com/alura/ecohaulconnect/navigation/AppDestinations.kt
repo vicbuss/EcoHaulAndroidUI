@@ -51,9 +51,9 @@ val bottomAppBarItems = listOf<NavBarItem>(
         icon = Icons.Filled.AddCircle,
         route = "${ServiceForm.route}/${0L}"
     ),
-    NavBarItem(
-        label = AppDestinations.Notifications.title,
-        icon = Icons.Filled.Notifications,
-        route = AppDestinations.Notifications.route
-    )
+//    NavBarItem(
+//        label = AppDestinations.Notifications.title,
+//        icon = Icons.Filled.Notifications,
+//        route = AppDestinations.Notifications.route
+//    )
 )
